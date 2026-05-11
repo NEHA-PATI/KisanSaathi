@@ -1,0 +1,178 @@
+{
+  "farmer_id": "default_farmer",
+  "name": "Sambalpur Farmer",
+  "saved_lands": [
+    {
+      "id": "land_1778493133",
+      "saved_at": 1778493133,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.00283813476564,
+              21.251436951431806
+            ],
+            [
+              84.05364990234376,
+              21.26039091538569
+            ],
+            [
+              84.03854370117189,
+              21.204099819805286
+            ],
+            [
+              84.00283813476564,
+              21.251436951431806
+            ]
+          ]
+        ]
+      },
+      "preview_image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20160%20120%22%3E%3Crect%20width%3D%22160%22%20height%3D%22120%22%20fill%3D%22%23dff5e8%22%2F%3E%3Cpath%20d%3D%22M0%2078%20C36%2058%2064%2096%20160%2054%20L160%20120%20L0%20120Z%22%20fill%3D%22%23b7e3c8%22%2F%3E%3Cpolygon%20points%3D%2216.0%2C30.0%20144.0%2C16.0%20105.9%2C104.0%2016.0%2C30.0%22%20fill%3D%22%2314b8a6%22%20fill-opacity%3D%22.32%22%20stroke%3D%22%23047857%22%20stroke-width%3D%223%22%2F%3E%3Ccircle%20cx%3D%22132%22%20cy%3D%2224%22%20r%3D%2212%22%20fill%3D%22%23fde68a%22%2F%3E%3C%2Fsvg%3E",
+      "analysis": {
+        "avg_health": 6.835714285714286,
+        "cell_count": 42,
+        "risk": "Moderate",
+        "irrigation_need_pct": 26.2,
+        "irrigation_advice": "Irrigation demand is 26%. Keep irrigation ready and monitor stress signals across the selected land.",
+        "trend": [
+          6.135714285714286,
+          6.635714285714286,
+          6.835714285714286,
+          7.085714285714286
+        ]
+      }
+    },
+    {
+      "id": "land_1778493077",
+      "saved_at": 1778493077,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.37500000000001,
+              21.94344890498081
+            ],
+            [
+              84.34204101562501,
+              21.867043916386365
+            ],
+            [
+              84.48760986328125,
+              21.897610827690286
+            ],
+            [
+              84.37500000000001,
+              21.94344890498081
+            ]
+          ]
+        ]
+      },
+      "preview_image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20160%20120%22%3E%3Crect%20width%3D%22160%22%20height%3D%22120%22%20fill%3D%22%23dff5e8%22%2F%3E%3Cpath%20d%3D%22M0%2078%20C36%2058%2064%2096%20160%2054%20L160%20120%20L0%20120Z%22%20fill%3D%22%23b7e3c8%22%2F%3E%3Cpolygon%20points%3D%2245.0%2C16.0%2016.0%2C104.0%20144.0%2C68.8%2045.0%2C16.0%22%20fill%3D%22%2314b8a6%22%20fill-opacity%3D%22.32%22%20stroke%3D%22%23047857%22%20stroke-width%3D%223%22%2F%3E%3Ccircle%20cx%3D%22132%22%20cy%3D%2224%22%20r%3D%2212%22%20fill%3D%22%23fde68a%22%2F%3E%3C%2Fsvg%3E",
+      "analysis": {
+        "avg_health": 5.640384615384615,
+        "cell_count": 130,
+        "risk": "Moderate",
+        "irrigation_need_pct": 60.9,
+        "irrigation_advice": "Irrigation demand is 61%. Keep irrigation ready and monitor stress signals across the selected land.",
+        "trend": [
+          4.940384615384615,
+          5.440384615384615,
+          5.640384615384615,
+          5.890384615384615
+        ]
+      }
+    },
+    {
+      "id": "land_1778492853",
+      "saved_at": 1778492853,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.06738281250001,
+              21.627377215287396
+            ],
+            [
+              84.18273925781251,
+              21.64268702287879
+            ],
+            [
+              84.19097900390625,
+              21.550803863857077
+            ],
+            [
+              84.06188964843751,
+              21.522716830301608
+            ],
+            [
+              84.06738281250001,
+              21.627377215287396
+            ]
+          ]
+        ]
+      },
+      "preview_image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20160%20120%22%3E%3Crect%20width%3D%22160%22%20height%3D%22120%22%20fill%3D%22%23dff5e8%22%2F%3E%3Cpath%20d%3D%22M0%2078%20C36%2058%2064%2096%20160%2054%20L160%20120%20L0%20120Z%22%20fill%3D%22%23b7e3c8%22%2F%3E%3Cpolygon%20points%3D%2221.4%2C27.2%20135.8%2C16.0%20144.0%2C83.4%2016.0%2C104.0%2021.4%2C27.2%22%20fill%3D%22%2314b8a6%22%20fill-opacity%3D%22.32%22%20stroke%3D%22%23047857%22%20stroke-width%3D%223%22%2F%3E%3Ccircle%20cx%3D%22132%22%20cy%3D%2224%22%20r%3D%2212%22%20fill%3D%22%23fde68a%22%2F%3E%3C%2Fsvg%3E",
+      "analysis": {
+        "avg_health": 5.373626373626373,
+        "cell_count": 182,
+        "risk": "Moderate",
+        "irrigation_need_pct": 58.5,
+        "irrigation_advice": "Irrigation demand is 58%. Keep irrigation ready and monitor stress signals across the selected land.",
+        "trend": [
+          4.673626373626373,
+          5.173626373626373,
+          5.373626373626373,
+          5.623626373626373
+        ]
+      }
+    },
+    {
+      "id": "land_1778389893",
+      "saved_at": 1778389893,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              84.22994613647462,
+              21.45453138162975
+            ],
+            [
+              84.26084518432617,
+              21.455170082804226
+            ],
+            [
+              84.26324844360352,
+              21.432494478093528
+            ],
+            [
+              84.23166275024415,
+              21.43265417777302
+            ],
+            [
+              84.22994613647462,
+              21.45453138162975
+            ]
+          ]
+        ]
+      },
+      "preview_image": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20160%20120%22%3E%3Crect%20width%3D%22160%22%20height%3D%22120%22%20fill%3D%22%23dff5e8%22%2F%3E%3Cpath%20d%3D%22M0%2078%20C36%2058%2064%2096%20160%2054%20L160%20120%20L0%20120Z%22%20fill%3D%22%23b7e3c8%22%2F%3E%3Cpolygon%20points%3D%2216.0%2C18.5%20134.8%2C16.0%20144.0%2C104.0%2022.6%2C103.4%2016.0%2C18.5%22%20fill%3D%22%2314b8a6%22%20fill-opacity%3D%22.32%22%20stroke%3D%22%23047857%22%20stroke-width%3D%223%22%2F%3E%3Ccircle%20cx%3D%22132%22%20cy%3D%2224%22%20r%3D%2212%22%20fill%3D%22%23fde68a%22%2F%3E%3C%2Fsvg%3E",
+      "analysis": {
+        "avg_health": 6.109288537549403,
+        "risk": "Moderate",
+        "irrigation_need_pct": 59.03833992094864,
+        "irrigation_advice": "Irrigation demand is 59%. This is estimated from the visible map grid.",
+        "trend": [
+          5.309288537549403,
+          5.809288537549403,
+          6.109288537549403,
+          6.309288537549403
+        ],
+        "source": "visible-bbox-fallback"
+      }
+    }
+  ]
+}

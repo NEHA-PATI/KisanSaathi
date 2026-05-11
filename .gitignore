@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+venv/
+.env
+
+# python
+__pycache__/
+*.pyc
+
+# build
+dist/
+build/
+
+# logs
+*.log
+
+# vscode
+.vscode/
+
+# data
+*.csv
+*.parquet
+*.h5
+*.pt
+*.pth
+
+# OS
+.DS_Store
