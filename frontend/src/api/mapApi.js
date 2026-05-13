@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000",
   timeout: 20000,
 });
@@ -82,16 +82,11 @@ export const analyzePolygon = async (geometry) => {
   return data;
 };
 
-export const fetchFarmerProfile = async () => {
-  const { data } = await api.get("/farmer_profile");
-  return data;
-};
-
-export const saveFarmerLand = async ({ geometry, previewImage, analysis }) => {
-  const { data } = await api.post("/farmer_land", {
+export const createLand = async ({ farmerId, landName, geometry }) => {
+  const { data } = await api.post("/lands", {
+    farmer_id: farmerId,
+    land_name: landName,
     geometry,
-    preview_image: previewImage,
-    analysis,
   });
   return data;
 };

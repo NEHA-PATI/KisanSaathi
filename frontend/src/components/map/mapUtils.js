@@ -68,7 +68,8 @@ export const riskLabel = (properties) => {
 
 export const waterStressLabel = (value) => {
   if (value == null) return "Moderate";
-  if (value > 0.8) return "High";
-  if (value > 0.45) return "Medium";
+  const normalized = Number(value) > 1 ? Math.max(0, Math.min(1, (Number(value) - 3.2) / 5.8)) : Number(value);
+  if (normalized > 0.8) return "High";
+  if (normalized > 0.45) return "Medium";
   return "Low";
 };

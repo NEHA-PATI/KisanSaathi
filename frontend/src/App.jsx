@@ -15,6 +15,7 @@ import KnowledgeGrid from './pages/KnowledgeGrid';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
+import LandAnalytics from './pages/LandAnalytics';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -48,6 +49,7 @@ const AuthenticatedApp = () => {
         <Route path="/contact" element={<Contact />} />
       </Route>
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/lands/:id" element={<LandAnalytics />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

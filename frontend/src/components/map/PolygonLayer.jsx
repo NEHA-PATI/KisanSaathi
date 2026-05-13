@@ -7,6 +7,8 @@ import { polygonStyle } from "./mapUtils";
 const PolygonLayer = memo(function PolygonLayer({ map }) {
   const layerRef = useRef(null);
   const activeLayerRef = useRef("health");
+  const hoverRafRef = useRef(null);
+  const pendingHoverRef = useRef(null);
   const polygons = useMapStore((state) => state.polygons);
   const activeLayer = useMapStore((state) => state.activeLayer);
   const setHoveredFeature = useMapStore((state) => state.setHoveredFeature);
@@ -20,6 +22,25 @@ const PolygonLayer = memo(function PolygonLayer({ map }) {
   useEffect(() => {
     if (!map || layerRef.current) return;
 
+    const scheduleHover = (feature, event) => {
+      pendingHoverRef.current = {
+        feature,
+        position: {
+          x: event.originalEvent.clientX,
+          y: event.originalEvent.clientY,
+        },
+      };
+
+      if (hoverRafRef.current) return;
+      hoverRafRef.current = requestAnimationFrame(() => {
+        const pending = pendingHoverRef.current;
+        if (pending) {
+          setHoveredFeature(pending.feature, pending.position);
+        }
+        hoverRafRef.current = null;
+      });
+    };
+
     layerRef.current = L.geoJSON(null, {
       interactive: true,
       bubblingMouseEvents: false,
@@ -28,19 +49,14 @@ const PolygonLayer = memo(function PolygonLayer({ map }) {
         layer.on({
           mouseover: (event) => {
             event.target.setStyle({ weight: 1.8, fillOpacity: 0.58 });
-            setHoveredFeature(feature, {
-              x: event.originalEvent.clientX,
-              y: event.originalEvent.clientY,
-            });
+            scheduleHover(feature, event);
           },
           mousemove: (event) => {
-            setHoveredFeature(feature, {
-              x: event.originalEvent.clientX,
-              y: event.originalEvent.clientY,
-            });
+            scheduleHover(feature, event);
           },
           mouseout: (event) => {
             layerRef.current?.resetStyle(event.target);
+            pendingHoverRef.current = null;
             setHoveredFeature(null);
           },
           click: (event) => {
@@ -55,6 +71,7 @@ const PolygonLayer = memo(function PolygonLayer({ map }) {
     }).addTo(map);
 
     return () => {
+      if (hoverRafRef.current) cancelAnimationFrame(hoverRafRef.current);
       layerRef.current?.remove();
       layerRef.current = null;
     };

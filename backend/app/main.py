@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routes.map import router as map_router
+from app.routes.land import router as land_router
 
 app = FastAPI()
 
@@ -14,6 +15,7 @@ app.add_middleware(
 )
 
 app.include_router(map_router)
+app.include_router(land_router)
 
 
 @app.get("/")

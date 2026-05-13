@@ -25,7 +25,7 @@ const VIEWS = {
   },
 };
 
-const BaseMapToggle = memo(function BaseMapToggle({ map }) {
+const BaseMapToggle = memo(function BaseMapToggle({ map, compact = false }) {
   const [activeView, setActiveView] = useState("satellite");
   const baseLayerRef = useRef(null);
   const labelLayerRef = useRef(null);
@@ -57,8 +57,8 @@ const BaseMapToggle = memo(function BaseMapToggle({ map }) {
   }, [activeView, map]);
 
   return (
-    <section className="rounded-lg border border-white/10 bg-slate-950/55 p-3 text-white shadow-xl shadow-black/20 backdrop-blur-xl">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-teal-200">
+    <section className={`rounded-lg border border-emerald-100 bg-white/90 p-3 text-slate-900 shadow-xl shadow-emerald-950/10 backdrop-blur-xl ${compact ? "sr-only" : ""}`}>
+      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#1A9E6E]">
         Map View
       </p>
       <div className="grid grid-cols-3 gap-1">
@@ -71,7 +71,7 @@ const BaseMapToggle = memo(function BaseMapToggle({ map }) {
               type="button"
               onClick={() => setActiveView(key)}
               className={`flex h-16 flex-col items-center justify-center gap-1 rounded-md text-xs font-semibold transition ${
-                selected ? "bg-teal-300 text-slate-950" : "bg-white/8 text-slate-200 hover:bg-white/12"
+                selected ? "bg-[#1A9E6E] text-white" : "bg-emerald-50 text-slate-700 hover:bg-emerald-100"
               }`}
             >
               <Icon className="h-4 w-4" />

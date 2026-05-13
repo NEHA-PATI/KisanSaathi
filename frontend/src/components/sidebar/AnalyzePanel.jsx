@@ -48,28 +48,28 @@ const AnalyzePanel = memo(function AnalyzePanel() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 36 }}
           transition={{ type: "spring", stiffness: 190, damping: 24 }}
-          className="absolute right-4 top-4 z-[520] max-h-[calc(100vh-2rem)] w-[340px] overflow-hidden rounded-lg border border-white/10 bg-slate-950/65 text-white shadow-2xl shadow-black/35 backdrop-blur-2xl"
+          className="absolute right-4 top-4 z-[520] max-h-[calc(100vh-2rem)] w-[340px] overflow-hidden rounded-lg border border-emerald-100 bg-white/92 text-slate-900 shadow-2xl shadow-emerald-950/15 backdrop-blur-2xl"
         >
-          <div className="border-b border-white/10 p-4">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-teal-200">
+          <div className="border-b border-emerald-100 p-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1A9E6E]">
               Prediction Sidebar
             </p>
             <h2 className="mt-2 text-2xl font-bold">Land Intelligence</h2>
-            <p className="mt-1 text-sm text-slate-300">
+            <p className="mt-1 text-sm text-slate-500">
               Spatial signals from the visible BhoomiAI prediction grid.
             </p>
           </div>
 
           <div className="space-y-3 p-4">
             {error && (
-              <div className="rounded-md border border-amber-300/20 bg-amber-300/10 p-3 text-xs text-amber-100">
+              <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
                 {error}
               </div>
             )}
 
-            <div className="rounded-lg bg-white/8 p-4">
+            <div className="rounded-lg bg-emerald-50 p-4">
               <div className="flex items-center justify-between">
-                <span className="flex items-center gap-2 text-sm text-slate-300">
+                <span className="flex items-center gap-2 text-sm text-slate-600">
                   <ShieldCheck className="h-4 w-4 text-emerald-300" />
                   Average Health
                 </span>
@@ -77,7 +77,7 @@ const AnalyzePanel = memo(function AnalyzePanel() {
                   {formatNumber(avgHealth)}
                 </span>
               </div>
-              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-emerald-100">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-300"
                   style={{ width: `${Math.min((avgHealth || 0) * 10, 100)}%` }}
@@ -86,16 +86,16 @@ const AnalyzePanel = memo(function AnalyzePanel() {
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-lg bg-white/8 p-3">
+              <div className="rounded-lg bg-emerald-50 p-3">
                 <Activity className="mb-2 h-4 w-4 text-teal-300" />
-                <p className="text-xs text-slate-400">Risk</p>
+                <p className="text-xs text-slate-500">Risk</p>
                 <p className="font-semibold">
                   {analyzeResult?.risk ?? (selected?.risk_flag ? "Watch" : "Safe")}
                 </p>
               </div>
-              <div className="rounded-lg bg-white/8 p-3">
+              <div className="rounded-lg bg-emerald-50 p-3">
                 <Droplets className="mb-2 h-4 w-4 text-sky-300" />
-                <p className="text-xs text-slate-400">Irrigation</p>
+                <p className="text-xs text-slate-500">Irrigation</p>
                 <p className="font-semibold">
                   {irrigationNeedPct == null
                     ? selected?.irrigation_needed
@@ -106,7 +106,7 @@ const AnalyzePanel = memo(function AnalyzePanel() {
               </div>
             </div>
 
-            <div className="rounded-lg bg-white/8 p-4">
+            <div className="rounded-lg bg-emerald-50 p-4">
               <div className="mb-2 flex items-center gap-2">
                 <Sprout className="h-4 w-4 text-emerald-300" />
                 <p className="text-sm font-semibold">Mini Trend</p>
@@ -114,11 +114,11 @@ const AnalyzePanel = memo(function AnalyzePanel() {
               <TrendSparkline values={analyzeResult?.trend} />
             </div>
 
-            <div className="rounded-lg bg-teal-300/10 p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-teal-200">
+            <div className="rounded-lg bg-[#1A9E6E]/10 p-4">
+              <p className="text-xs uppercase tracking-[0.18em] text-[#1A9E6E]">
                 Advice
               </p>
-              <p className="mt-2 text-sm leading-6 text-slate-100">
+              <p className="mt-2 text-sm leading-6 text-slate-700">
                 {analyzeResult?.irrigation_advice ??
                   "Draw a land polygon and run analysis to receive aggregated irrigation guidance."}
               </p>

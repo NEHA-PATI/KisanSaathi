@@ -28,11 +28,13 @@ const pointsToGeometry = (points) => {
 
 const DrawControl = memo(function DrawControl({ map }) {
   const drawLayerRef = useRef(null);
+  const polygonRef = useRef(null);
   const drawPoints = useMapStore((state) => state.drawPoints);
   const selectedPointIndex = useMapStore((state) => state.selectedPointIndex);
   const addDrawPoint = useMapStore((state) => state.addDrawPoint);
   const setSelectedPointIndex = useMapStore((state) => state.setSelectedPointIndex);
   const setDrawnGeometry = useMapStore((state) => state.setDrawnGeometry);
+  const setDrawPointsFromLatLngs = useMapStore((state) => state.setDrawPointsFromLatLngs);
 
   useEffect(() => {
     if (!map || drawLayerRef.current) return;
@@ -62,6 +64,7 @@ const DrawControl = memo(function DrawControl({ map }) {
     if (!drawLayerRef.current) return;
 
     drawLayerRef.current.clearLayers();
+    polygonRef.current = null;
 
     if (drawPoints.length >= 2) {
       L.polyline(
@@ -77,16 +80,26 @@ const DrawControl = memo(function DrawControl({ map }) {
 
     const geometry = pointsToGeometry(drawPoints);
     if (geometry) {
-      const polygon = L.geoJSON(geometry, {
-        style: {
+      const polygon = L.polygon(
+        drawPoints.map((point) => [point.lat, point.lng]),
+        {
           color: "#14b8a6",
           fillColor: "#14b8a6",
-          fillOpacity: 0.2,
+          fillOpacity: 0.22,
           weight: 3,
           className: "bhoomi-drawn-polygon",
-        },
+          bubblingMouseEvents: false,
+        }
+      );
+
+      polygon.on("edit", () => {
+        const latlngs = polygon.getLatLngs()?.[0] || [];
+        setDrawPointsFromLatLngs(latlngs);
       });
+
       polygon.addTo(drawLayerRef.current);
+      polygon.editing?.enable();
+      polygonRef.current = polygon;
       setDrawnGeometry(geometry);
     } else {
       setDrawnGeometry(null);
@@ -95,14 +108,27 @@ const DrawControl = memo(function DrawControl({ map }) {
     drawPoints.forEach((point, index) => {
       const marker = L.marker([point.lat, point.lng], {
         icon: pointIcon(index, selectedPointIndex === index),
+        draggable: true,
       });
       marker.on("click", (event) => {
         event.originalEvent.stopPropagation();
         setSelectedPointIndex(index);
       });
+      marker.on("dragend", (event) => {
+        const latlng = event.target.getLatLng();
+        const nextPoints = [...useMapStore.getState().drawPoints];
+        nextPoints[index] = { lat: latlng.lat, lng: latlng.lng };
+        setDrawPointsFromLatLngs(nextPoints);
+      });
       marker.addTo(drawLayerRef.current);
     });
-  }, [drawPoints, selectedPointIndex, setDrawnGeometry, setSelectedPointIndex]);
+  }, [
+    drawPoints,
+    selectedPointIndex,
+    setDrawPointsFromLatLngs,
+    setDrawnGeometry,
+    setSelectedPointIndex,
+  ]);
 
   return null;
 });

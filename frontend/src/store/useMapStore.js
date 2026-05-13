@@ -5,7 +5,6 @@ const defaultLayers = {
   ndvi: false,
   water: false,
   heat: false,
-  irrigation: false,
 };
 
 export const useMapStore = create((set) => ({
@@ -20,13 +19,10 @@ export const useMapStore = create((set) => ({
   selectedPointIndex: null,
   drawnGeometry: null,
   analyzeResult: null,
-  farmerProfile: {
-    farmer_id: "default_farmer",
-    name: "Sambalpur Farmer",
-    saved_lands: [],
-  },
+  saveModalOpen: false,
   isLoading: false,
   isAnalyzing: false,
+  isSaving: false,
   error: null,
 
   setActiveLayer: (layer) =>
@@ -56,17 +52,23 @@ export const useMapStore = create((set) => ({
       };
     }),
   setSelectedPointIndex: (selectedPointIndex) => set({ selectedPointIndex }),
+  setDrawPointsFromLatLngs: (latlngs) =>
+    set({
+      drawPoints: latlngs.map((point) => ({ lat: point.lat, lng: point.lng })),
+    }),
   clearDrawPoints: () =>
     set({
       drawPoints: [],
       selectedPointIndex: null,
       drawnGeometry: null,
       analyzeResult: null,
+      saveModalOpen: false,
     }),
   setDrawnGeometry: (drawnGeometry) => set({ drawnGeometry, analyzeResult: null }),
   setAnalyzeResult: (analyzeResult) => set({ analyzeResult }),
-  setFarmerProfile: (farmerProfile) => set({ farmerProfile }),
+  setSaveModalOpen: (saveModalOpen) => set({ saveModalOpen }),
   setLoading: (isLoading) => set({ isLoading }),
   setAnalyzing: (isAnalyzing) => set({ isAnalyzing }),
+  setSaving: (isSaving) => set({ isSaving }),
   setError: (error) => set({ error }),
 }));

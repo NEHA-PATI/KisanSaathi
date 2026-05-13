@@ -1,15 +1,14 @@
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { Droplets, Flame, Leaf, ShieldCheck, Sprout } from "lucide-react";
+import { Droplets, Flame, Leaf, ShieldCheck } from "lucide-react";
 
 import { useMapStore } from "@/store/useMapStore";
 
 const layerOptions = [
-  { key: "health", label: "Health Score", icon: ShieldCheck },
+  { key: "health", label: "Health", icon: ShieldCheck },
   { key: "ndvi", label: "NDVI", icon: Leaf },
   { key: "water", label: "Water Stress", icon: Droplets },
   { key: "heat", label: "Heat Stress", icon: Flame },
-  { key: "irrigation", label: "Irrigation Need", icon: Sprout },
 ];
 
 const LayerToggle = memo(function LayerToggle() {
@@ -21,10 +20,10 @@ const LayerToggle = memo(function LayerToggle() {
       initial={{ opacity: 0, x: -16 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.35 }}
-      className="rounded-lg border border-white/10 bg-slate-950/55 p-3 text-white shadow-xl shadow-black/20 backdrop-blur-xl"
+      className="rounded-lg border border-emerald-100 bg-white/90 p-3 text-slate-900 shadow-xl shadow-emerald-950/10 backdrop-blur-xl"
     >
       <div className="mb-2 flex items-center justify-between">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-teal-200">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1A9E6E]">
           Layers
         </p>
         <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_18px_#34d399]" />
@@ -41,8 +40,8 @@ const LayerToggle = memo(function LayerToggle() {
               onClick={() => setActiveLayer(key)}
               className={`flex h-9 w-full items-center justify-between rounded-md px-2.5 text-left text-sm transition ${
                 isActive
-                  ? "bg-teal-300 text-slate-950"
-                  : "text-slate-200 hover:bg-white/10"
+                  ? "bg-[#1A9E6E] text-white"
+                  : "text-slate-700 hover:bg-emerald-50"
               }`}
             >
               <span className="flex items-center gap-2">
@@ -51,7 +50,7 @@ const LayerToggle = memo(function LayerToggle() {
               </span>
               <span
                 className={`h-2.5 w-2.5 rounded-full ${
-                  isActive ? "bg-slate-950" : "bg-white/25"
+                  isActive ? "bg-white" : "bg-emerald-200"
                 }`}
               />
             </button>
