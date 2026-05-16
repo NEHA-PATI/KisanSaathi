@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: bhoomiapi
+    runtime: python312
+    plan: free
+    buildCommand: pip install -r backend/requirements.deploy.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ENVIRONMENT
+        scope: run
+        value: production
+      - key: DB_HOST
+        scope: run
+        value: ${DB_HOST}
+      - key: DB_PORT
+        scope: run
+        value: ${DB_PORT}
+      - key: DB_NAME
+        scope: run
+        value: ${DB_NAME}
+      - key: DB_USER
+        scope: run
+        value: ${DB_USER}
+      - key: DB_PASSWORD
+        scope: run
+        value: ${DB_PASSWORD}
+      - key: FRONTEND_URL
+        scope: run
+        value: ${FRONTEND_URL}
+    region: oregon
+    maxInstances: 1
+    healthCheckPath: /
+
+  - type: static
+    name: bhoomiapp
+    runtime: static
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: frontend/dist
+    routes:
+      - path: /
+        destination: /index.html
+    region: oregon
+    envVars:
+      - key: VITE_API_BASE_URL
+        scope: build
+        value: ${VITE_API_BASE_URL}

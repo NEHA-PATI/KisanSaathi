@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from sqlalchemy import text
 
 from app.db import engine
+from ingestion.config import get_district_config, list_district_keys
 
 try:
     import redis
@@ -23,9 +24,11 @@ REDIS_URL = os.getenv("REDIS_URL")
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 
-CSV_FALLBACK_PATH = PROJECT_ROOT / "data" / "processed" / "postgis_ready.csv"
+ACTIVE_DISTRICT_CONFIG = get_district_config()
 
-METRICS_FALLBACK_PATH = PROJECT_ROOT / "data" / "processed" / "db_ready.csv"
+CSV_FALLBACK_PATH = ACTIVE_DISTRICT_CONFIG.processed_dir / "postgis_ready.csv"
+
+METRICS_FALLBACK_PATH = ACTIVE_DISTRICT_CONFIG.processed_dir / "db_ready.csv"
 
 redis_client = (
     redis.from_url(REDIS_URL, decode_responses=True) if redis and REDIS_URL else None
@@ -52,13 +55,11 @@ def get_prediction_columns():
 
         with engine.begin() as conn:
 
-            result = conn.execute(
-                text("""
+            result = conn.execute(text("""
                     SELECT column_name
                     FROM information_schema.columns
                     WHERE table_name = 'agri_predictions'
-                    """)
-            )
+                    """))
 
             return {row[0] for row in result.fetchall()}
 
@@ -76,6 +77,9 @@ def metric_sql(column_name, fallback="NULL::double precision"):
 
     if column_name == "ndvi" and "ndvi_pred" in columns:
         return "ndvi_pred"
+
+    if column_name == "soil_moisture" and "soil_moisture_pred" in columns:
+        return "soil_moisture_pred"
 
     return fallback
 
@@ -133,6 +137,36 @@ def enrich_metrics(row):
     row["risk_flag"] = int(row["health_score"] < 4.2 or irrigation_need_pct >= 70)
 
     return row
+
+
+@router.get("/district_boundaries")
+def district_boundaries():
+    features = []
+
+    for slug in list_district_keys():
+        config = get_district_config(slug)
+        boundary_path = config.source_boundary_path
+
+        if not boundary_path.exists():
+            continue
+
+        with boundary_path.open("r", encoding="utf-8") as boundary_file:
+            payload = json.load(boundary_file)
+
+        raw_features = []
+        if payload.get("type") == "FeatureCollection":
+            raw_features = payload.get("features", [])
+        elif payload.get("type") == "Feature":
+            raw_features = [payload]
+
+        for feature in raw_features:
+            properties = feature.get("properties") or {}
+            properties["district_slug"] = slug
+            properties["district_name"] = config.name
+            feature["properties"] = properties
+            features.append(feature)
+
+    return {"type": "FeatureCollection", "features": features}
 
 
 def bbox_cache_key(minx, miny, maxx, maxy):
@@ -325,6 +359,7 @@ def map_bbox(
     try:
 
         ndvi_sql = metric_sql("ndvi")
+        moisture_sql = metric_sql("soil_moisture")
         water_sql = metric_sql("water_stress")
         heat_sql = metric_sql("heat_stress")
         irrigation_sql = metric_sql("irrigation_needed", "0")
@@ -334,19 +369,31 @@ def map_bbox(
 
             result = conn.execute(
                 text(f"""
+                    WITH latest AS (
+                        SELECT district_slug, MAX(prediction_date) AS prediction_date
+                        FROM agri_predictions
+                        GROUP BY district_slug
+                    )
+
                     SELECT
-                        cell_id,
-                        health_score,
+                        ag.grid_id,
+                        ag.cell_id,
+                        ag.health_score,
                         {ndvi_sql} AS ndvi,
+                        {moisture_sql} AS soil_moisture,
                         {water_sql} AS water_stress,
                         {heat_sql} AS heat_stress,
                         {irrigation_sql} AS irrigation_needed,
                         {risk_sql} AS risk_flag,
-                        ST_AsGeoJSON(geom)
+                        ag.district_slug,
+                        ST_AsGeoJSON(ag.geom)
 
-                    FROM agri_predictions
+                    FROM agri_predictions ag
+                    JOIN latest
+                        ON ag.prediction_date = latest.prediction_date
+                        AND ag.district_slug = latest.district_slug
 
-                    WHERE geom && ST_MakeEnvelope(
+                    WHERE ag.geom && ST_MakeEnvelope(
                         :minx,
                         :miny,
                         :maxx,
@@ -369,14 +416,17 @@ def map_bbox(
             result_data = [
                 enrich_metrics(
                     {
-                        "cell_id": row[0],
-                        "health_score": row[1],
-                        "ndvi": row[2],
-                        "water_stress": row[3],
-                        "heat_stress": row[4],
-                        "irrigation_needed": row[5],
-                        "risk_flag": row[6],
-                        "geometry": row[7],
+                        "grid_id": row[0],
+                        "cell_id": row[1],
+                        "health_score": row[2],
+                        "ndvi": row[3],
+                        "soil_moisture": row[4],
+                        "water_stress": row[5],
+                        "heat_stress": row[6],
+                        "irrigation_needed": row[7],
+                        "risk_flag": row[8],
+                        "district_slug": row[9],
+                        "geometry": row[10],
                     }
                 )
                 for row in rows
@@ -404,6 +454,7 @@ def analyze_polygon(payload: AnalyzePolygonRequest):
     try:
 
         ndvi_sql = metric_sql("ndvi")
+        moisture_sql = metric_sql("soil_moisture")
         water_sql = metric_sql("water_stress")
         heat_sql = metric_sql("heat_stress")
 
@@ -411,7 +462,12 @@ def analyze_polygon(payload: AnalyzePolygonRequest):
 
             result = conn.execute(
                 text(f"""
-                    WITH selected_land AS (
+                    WITH latest AS (
+                        SELECT district_slug, MAX(prediction_date) AS prediction_date
+                        FROM agri_predictions
+                        GROUP BY district_slug
+                    ),
+                    selected_land AS (
                         SELECT ST_SetSRID(
                             ST_GeomFromGeoJSON(:geometry),
                             4326
@@ -419,31 +475,89 @@ def analyze_polygon(payload: AnalyzePolygonRequest):
                     )
 
                     SELECT
-                        COALESCE(AVG(health_score), 0) AS avg_health,
+                        COALESCE(
+                            SUM(
+                                ag.health_score
+                                * ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)
+                            )
+                            / NULLIF(SUM(ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)), 0),
+                            0
+                        ) AS avg_health,
                         COUNT(*) AS cell_count,
-                        COALESCE(AVG({ndvi_sql}), 0) AS avg_ndvi,
-                        COALESCE(AVG({water_sql}), 0)
-                            AS avg_water_stress,
-                        COALESCE(AVG({heat_sql}), 0)
-                            AS avg_heat_stress
+                        COALESCE(
+                            SUM(
+                                {ndvi_sql}
+                                * ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)
+                            )
+                            / NULLIF(SUM(ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)), 0),
+                            0
+                        ) AS avg_ndvi,
+                        COALESCE(
+                            SUM(
+                                {moisture_sql}
+                                * ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)
+                            )
+                            / NULLIF(SUM(ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)), 0),
+                            0
+                        ) AS avg_moisture,
+                        COALESCE(
+                            SUM(
+                                {water_sql}
+                                * ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)
+                            )
+                            / NULLIF(SUM(ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)), 0),
+                            0
+                        ) AS avg_water_stress,
+                        COALESCE(
+                            SUM(
+                                {heat_sql}
+                                * ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)
+                            )
+                            / NULLIF(SUM(ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)), 0),
+                            0
+                        ) AS avg_heat_stress,
+                        COALESCE(
+                            SUM(
+                                ag.irrigation_need_pct
+                                * ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)
+                            )
+                            / NULLIF(SUM(ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)), 0),
+                            0
+                        ) AS irrigation_need_pct,
+                        COALESCE(
+                            SUM(
+                                ag.risk_flag
+                                * ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)
+                            )
+                            / NULLIF(SUM(ST_Area(ST_Intersection(ag.geom, selected_land.geom)::geography)), 0),
+                            0
+                        ) AS risk_score
 
-                    FROM agri_predictions,
-                    selected_land
+                    FROM agri_predictions ag
+                    JOIN latest
+                        ON ag.prediction_date = latest.prediction_date
+                        AND ag.district_slug = latest.district_slug
+                    CROSS JOIN selected_land
 
                     WHERE ST_Intersects(
-                        agri_predictions.geom,
+                        ag.geom,
                         selected_land.geom
                     )
                     """),
-                {"geometry": json.dumps(payload.geometry)},
+                {
+                    "geometry": json.dumps(payload.geometry),
+                },
             )
 
             (
                 avg_health,
                 cell_count,
                 avg_ndvi,
+                avg_moisture,
                 avg_water_stress,
                 avg_heat_stress,
+                irrigation_need_pct,
+                risk_score,
             ) = result.fetchone()
 
     except Exception as e:
@@ -452,19 +566,15 @@ def analyze_polygon(payload: AnalyzePolygonRequest):
 
         return analyze_polygon_csv(payload.geometry)
 
-    enriched = enrich_metrics(
-        {
-            "health_score": avg_health,
-            "ndvi": avg_ndvi,
-            "water_stress": avg_water_stress,
-            "heat_stress": avg_heat_stress,
-        }
-    )
-
     return analysis_response(
-        enriched["health_score"],
+        avg_health,
         cell_count,
-        enriched["irrigation_need_pct"],
+        irrigation_need_pct,
+        avg_ndvi,
+        avg_moisture,
+        avg_water_stress,
+        avg_heat_stress,
+        risk_score,
     )
 
 
@@ -502,11 +612,21 @@ def analysis_response(
     avg_health,
     cell_count,
     irrigation_need_pct=0,
+    avg_ndvi=0,
+    avg_moisture=0,
+    avg_water_stress=0,
+    avg_heat_stress=0,
+    risk_score=0,
 ):
 
     avg_health = float(avg_health or 0)
 
     irrigation_need_pct = float(irrigation_need_pct or 0)
+    avg_ndvi = float(avg_ndvi or 0)
+    avg_moisture = float(avg_moisture or 0)
+    avg_water_stress = float(avg_water_stress or 0)
+    avg_heat_stress = float(avg_heat_stress or 0)
+    risk_score = float(risk_score or 0)
 
     if avg_health < 4 or irrigation_need_pct >= 70:
 
@@ -550,12 +670,24 @@ def analysis_response(
 
     return {
         "avg_health": avg_health,
+        "health": avg_health,
+        "avg_ndvi": avg_ndvi,
+        "crop_greenness": avg_ndvi,
+        "avg_moisture": avg_moisture,
+        "soil_wetness": avg_moisture,
+        "avg_water_stress": avg_water_stress,
+        "water_stress": avg_water_stress,
+        "avg_heat_stress": avg_heat_stress,
+        "heat_stress": avg_heat_stress,
         "cell_count": cell_count,
         "risk": risk,
+        "risk_score": risk_score,
+        "risk_label": risk,
         "irrigation_need_pct": round(
             irrigation_need_pct,
             1,
         ),
+        "water_need": round(irrigation_need_pct, 1),
         "irrigation_advice": advice,
         "trend": trend,
     }
