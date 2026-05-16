@@ -36,9 +36,11 @@ const asFeatureCollection = (payload) => {
           type: "Feature",
           geometry,
           properties: {
+            grid_id: row.grid_id,
             cell_id: row.cell_id,
             health_score: row.health_score,
             ndvi: row.ndvi ?? row.ndvi_pred,
+            soil_moisture: row.soil_moisture,
             water_stress: row.water_stress,
             heat_stress: row.heat_stress,
             irrigation_needed: row.irrigation_needed,
@@ -77,6 +79,11 @@ export const fetchPolygonsByBbox = async (bounds) => {
   return featureCollection;
 };
 
+export const fetchDistrictBoundaries = async () => {
+  const { data } = await api.get("/district_boundaries");
+  return data;
+};
+
 export const analyzePolygon = async (geometry) => {
   const { data } = await api.post("/analyze_polygon", { geometry });
   return data;
@@ -87,6 +94,30 @@ export const createLand = async ({ farmerId, landName, geometry }) => {
     farmer_id: farmerId,
     land_name: landName,
     geometry,
+  });
+  return data;
+};
+
+export const fetchLand = async (landId) => {
+  const { data } = await api.get(`/lands/${landId}`);
+  return data;
+};
+
+export const fetchLandTrends = async (landId) => {
+  const { data } = await api.get(`/lands/${landId}/trends`);
+  return data;
+};
+
+export const fetchLandOverlaps = async (landId, snapshotDate) => {
+  const { data } = await api.get(`/lands/${landId}/overlaps`, {
+    params: snapshotDate ? { snapshot_date: snapshotDate } : undefined,
+  });
+  return data;
+};
+
+export const backfillLandSnapshots = async (landId, params = {}) => {
+  const { data } = await api.post(`/lands/${landId}/snapshots/backfill`, null, {
+    params,
   });
   return data;
 };

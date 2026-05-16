@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { BriefcaseBusiness, Camera, MessageCircle, Play, Users } from 'lucide-react';
 
 export default function Footer() {
@@ -16,7 +16,7 @@ export default function Footer() {
                                 <circle cx="26" cy="13" r="2.5" fill="#2DD4BF" />
                             </svg>
                             <span className="text-lg font-bold">
-                                <span className="text-[#1A9E6E]">Bhoomi</span>
+                                <span className="text-[#1A9E6E]">Maati</span>
                                 <span className="text-[#2DD4BF]">AI</span>
                             </span>
                         </Link>
@@ -36,7 +36,7 @@ export default function Footer() {
                     <div>
                         <h4 className="text-sm font-semibold text-white mb-4 uppercase tracking-wide">Products</h4>
                         <ul className="space-y-2.5">
-                            {['BhoomiAI Cloud', 'BhoomiAI Apps', 'BhoomiAI Intelligence', 'BhoomiAI Sage'].map(l => (
+                            {['MaatiTrace Cloud', 'MaatiTrace Apps', 'MaatiTrace Intelligence', 'MaatiTrace Sage'].map(l => (
                                 <li key={l}><Link to="/products" className="text-gray-400 text-sm hover:text-[#2DD4BF] transition-colors">{l}</Link></li>
                             ))}
                         </ul>
@@ -74,7 +74,7 @@ export default function Footer() {
                 </div>
 
                 <div className="border-t border-white/10 py-6 flex flex-col md:flex-row justify-between items-center gap-3">
-                    <p className="text-gray-500 text-sm">(c) {new Date().getFullYear()} BhoomiAI. All rights reserved.</p>
+                    <p className="text-gray-500 text-sm">(c) {new Date().getFullYear()} MaatiTrace. All rights reserved.</p>
                     <div className="flex gap-6">
                         {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map(l => (
                             <a key={l} href="#" className="text-gray-500 text-xs hover:text-gray-300 transition-colors">{l}</a>

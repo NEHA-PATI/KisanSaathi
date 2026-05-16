@@ -8,7 +8,7 @@ const legendItems = [
 
 const MapLegend = memo(function MapLegend() {
   return (
-    <div className="absolute bottom-6 right-4 z-[500] w-[190px] rounded-lg border border-emerald-100 bg-white/90 p-3 text-slate-900 shadow-2xl shadow-emerald-950/10 backdrop-blur-xl">
+    <div className="absolute bottom-6 right-4 z-[500] w-[190px] rounded-lg border border-emerald-900/10 bg-white p-3 text-slate-900 shadow-2xl shadow-emerald-950/10">
       <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#1A9E6E]">
         Health Legend
       </p>

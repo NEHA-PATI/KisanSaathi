@@ -44,14 +44,14 @@ const DrawPointsPanel = memo(function DrawPointsPanel() {
     <motion.section
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
-      className="w-full rounded-lg border border-emerald-100 bg-white/92 p-3 text-slate-900 shadow-2xl shadow-emerald-950/15 backdrop-blur-2xl"
+      className="w-full overflow-hidden rounded-lg border border-emerald-950/10 bg-[#071711] p-3 text-white shadow-2xl shadow-black/35"
     >
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1A9E6E]">
-            Draw Mode
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200">
+            Boundary Capture
           </p>
-          <p className="text-sm text-slate-500">{drawPoints.length} boundary points</p>
+          <p className="text-sm text-slate-400">{drawPoints.length} precision points placed</p>
         </div>
         <button
           type="button"
@@ -59,16 +59,16 @@ const DrawPointsPanel = memo(function DrawPointsPanel() {
             setDrawing(false);
             clearDrawPoints();
           }}
-          className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-emerald-50 hover:text-slate-900"
+          className="flex h-9 w-9 items-center justify-center rounded-md text-slate-300 transition hover:bg-white/10 hover:text-white"
           aria-label="Exit draw mode"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
 
-      <div className="max-h-52 space-y-2 overflow-y-auto rounded-md border border-emerald-100 bg-emerald-50/60 p-2">
+      <div className="max-h-52 space-y-2 overflow-y-auto rounded-md border border-white/10 bg-slate-950/28 p-2">
         {drawPoints.length === 0 ? (
-          <div className="rounded-md border border-dashed border-emerald-300 bg-white/75 p-3 text-xs text-slate-600">
+          <div className="rounded-md border border-dashed border-yellow-200/35 bg-yellow-200/8 p-3 text-xs text-slate-300">
             Click field corners on the map.
           </div>
         ) : (
@@ -80,7 +80,9 @@ const DrawPointsPanel = memo(function DrawPointsPanel() {
                 type="button"
                 onClick={() => setSelectedPointIndex(index)}
                 className={`grid w-full grid-cols-[24px_1fr_30px] items-center gap-2 rounded-md p-2 text-left text-xs transition ${
-                  selected ? "bg-[#1A9E6E] text-white" : "bg-white text-slate-700 hover:bg-emerald-100"
+                  selected
+                    ? "bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-lg shadow-orange-950/20"
+                    : "bg-white/[0.06] text-slate-200 hover:bg-white/[0.1]"
                 }`}
               >
                 <span className="font-bold">{index + 1}</span>
@@ -100,7 +102,7 @@ const DrawPointsPanel = memo(function DrawPointsPanel() {
                     event.stopPropagation();
                     removeDrawPoint(index);
                   }}
-                  className="flex h-7 w-7 items-center justify-center rounded-md text-rose-500 hover:bg-rose-50"
+                  className="flex h-7 w-7 items-center justify-center rounded-md text-rose-200 hover:bg-rose-400/15"
                   aria-label={`Delete point ${index + 1}`}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -116,7 +118,7 @@ const DrawPointsPanel = memo(function DrawPointsPanel() {
           type="button"
           onClick={() => setDrawing(false)}
           disabled={drawPoints.length < 3}
-          className="flex h-10 items-center justify-center gap-2 rounded-md border border-emerald-100 text-sm font-semibold text-slate-700 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex h-10 items-center justify-center gap-2 rounded-md border border-white/10 text-sm font-semibold text-slate-200 transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
         >
           <Check className="h-4 w-4" />
           Done
@@ -125,7 +127,7 @@ const DrawPointsPanel = memo(function DrawPointsPanel() {
           type="button"
           onClick={runAnalyze}
           disabled={!drawnGeometry || isAnalyzing}
-          className="flex h-10 items-center justify-center gap-2 rounded-md bg-emerald-600 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-45"
+          className="flex h-10 items-center justify-center gap-2 rounded-md bg-emerald-300 text-sm font-bold text-slate-950 transition hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-45"
         >
           {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
           Analyze
@@ -136,7 +138,7 @@ const DrawPointsPanel = memo(function DrawPointsPanel() {
         type="button"
         onClick={() => setSaveModalOpen(true)}
         disabled={!drawnGeometry}
-        className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#1A9E6E] text-sm font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
+        className="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-md bg-gradient-to-r from-emerald-300 to-yellow-200 text-sm font-bold text-slate-950 shadow-lg shadow-emerald-950/20 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-40"
       >
         <Save className="h-4 w-4" />
         Save Land

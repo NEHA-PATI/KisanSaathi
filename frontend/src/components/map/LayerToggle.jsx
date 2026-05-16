@@ -20,7 +20,7 @@ const LayerToggle = memo(function LayerToggle() {
       initial={{ opacity: 0, x: -16 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.35 }}
-      className="rounded-lg border border-emerald-100 bg-white/90 p-3 text-slate-900 shadow-xl shadow-emerald-950/10 backdrop-blur-xl"
+      className="rounded-lg border border-emerald-900/10 bg-white p-3 text-slate-900 shadow-xl shadow-emerald-950/10"
     >
       <div className="mb-2 flex items-center justify-between">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#1A9E6E]">
@@ -40,7 +40,7 @@ const LayerToggle = memo(function LayerToggle() {
               onClick={() => setActiveLayer(key)}
               className={`flex h-9 w-full items-center justify-between rounded-md px-2.5 text-left text-sm transition ${
                 isActive
-                  ? "bg-[#1A9E6E] text-white"
+                  ? "bg-[#0F8F61] text-white shadow-sm"
                   : "text-slate-700 hover:bg-emerald-50"
               }`}
             >

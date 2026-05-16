@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import AnimatedSection from '../components/shared/AnimatedSection';
 import CountUpNumber from '../components/shared/CountUpNumber';
 import { Link } from 'react-router-dom';
@@ -9,13 +9,13 @@ const milestones = [
     { year: '2017', event: 'Expanded to 20+ countries, 5M+ acres under management' },
     { year: '2019', event: 'Launched AI-powered crop intelligence with satellite analytics' },
     { year: '2021', event: 'Reached 15M+ acres, partnered with World Bank and USAID' },
-    { year: '2023', event: 'Launched BhoomiAI Cloud & Sage — AI-first agri platform' },
+    { year: '2023', event: 'Launched MaatiTrace Cloud & Sage â€” AI-first agri platform' },
     { year: '2025', event: 'Computing 10% of world\'s croppable land, 96+ countries' },
 ];
 
 const values = [
-    { title: 'Mission', desc: 'Maximizing per-acre value for every stakeholder across the food and agriculture value chain — from farmers to consumers.' },
-    { title: 'Vision', desc: 'To be the intelligence layer of the global food system — decoding the biological balance sheet of food and agriculture.' },
+    { title: 'Mission', desc: 'Maximizing per-acre value for every stakeholder across the food and agriculture value chain â€” from farmers to consumers.' },
+    { title: 'Vision', desc: 'To be the intelligence layer of the global food system â€” decoding the biological balance sheet of food and agriculture.' },
     { title: 'Impact', desc: 'Empowering 7M+ farmers, improving livelihoods, and building a more sustainable and resilient global food system.' },
 ];
 
@@ -30,12 +30,12 @@ export default function About() {
                 </div>
                 <div className="relative max-w-4xl mx-auto px-4">
                     <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
-                        <span className="inline-block px-4 py-1.5 bg-[#1A9E6E]/20 text-[#2DD4BF] text-sm font-semibold rounded-full mb-5">About BhoomiAI</span>
+                        <span className="inline-block px-4 py-1.5 bg-[#1A9E6E]/20 text-[#2DD4BF] text-sm font-semibold rounded-full mb-5">About MaatiTrace</span>
                         <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight mb-5 max-w-3xl">
                             We're building the intelligence layer for global agriculture
                         </h1>
                         <p className="text-gray-300 text-lg max-w-2xl leading-relaxed">
-                            BhoomiAI is the world's most advanced AI-first agri-food platform, having computed over 1 billion acres of the planet's cultivable land across 96+ countries.
+                            MaatiTrace is the world's most advanced AI-first agri-food platform, having computed over 1 billion acres of the planet's cultivable land across 96+ countries.
                         </p>
                     </motion.div>
                 </div>
@@ -88,19 +88,19 @@ export default function About() {
                                 More than a decade of agriculture intelligence
                             </h2>
                             <p className="text-gray-500 leading-relaxed mb-4">
-                                Founded in 2010, BhoomiAI started with a simple but ambitious mission: to use data and technology to transform agriculture. Today, we are the world's most advanced AI-first agri-food platform.
+                                Founded in 2010, MaatiTrace started with a simple but ambitious mission: to use data and technology to transform agriculture. Today, we are the world's most advanced AI-first agri-food platform.
                             </p>
                             <p className="text-gray-500 leading-relaxed mb-6">
-                                We believe that agriculture — the world's largest and most critical industry — deserves the same intelligence infrastructure that powers financial markets and tech ecosystems. Our platform combines satellite remote sensing, weather intelligence, and deep learning to decode the biological balance sheet of global food and agriculture.
+                                We believe that agriculture â€” the world's largest and most critical industry â€” deserves the same intelligence infrastructure that powers financial markets and tech ecosystems. Our platform combines satellite remote sensing, weather intelligence, and deep learning to decode the biological balance sheet of global food and agriculture.
                             </p>
                             <Link to="/contact" className="inline-flex items-center gap-1.5 text-[#1A9E6E] font-semibold text-sm hover:underline">
-                                Get in touch →
+                                Get in touch â†’
                             </Link>
                         </AnimatedSection>
                         <AnimatedSection delay={0.15}>
                             <img
                                 src="https://media.base44.com/images/public/69f0e05492655c5c8658c4e3/7affef9a0_generated_0dc0da7b.png"
-                                alt="BhoomiAI team"
+                                alt="MaatiTrace team"
                                 className="rounded-2xl shadow-xl w-full object-cover"
                                 style={{ maxHeight: 380 }}
                             />

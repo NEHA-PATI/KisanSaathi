@@ -60,8 +60,8 @@ export const analyzeVisibleFallback = (polygons) => {
 };
 
 export const buildRecommendations = (analysis) => {
-  const irrigation = Number(analysis?.irrigation_need_pct || 0);
-  const health = Number(analysis?.avg_health || 0);
+  const irrigation = Number(analysis?.water_need ?? analysis?.irrigation_need_pct ?? 0);
+  const health = Number(analysis?.avg_health ?? analysis?.health ?? 0);
 
   if (irrigation >= 70 || health < 4) {
     return [

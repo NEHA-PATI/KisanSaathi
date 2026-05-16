@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+﻿import { lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 
 const BhoomiMap = lazy(() => import("@/components/map/BhoomiMap"));
@@ -16,7 +16,7 @@ export default function Dashboard() {
             >
               <div className="mx-auto mb-4 h-8 w-8 rounded-full border-2 border-teal-300 border-t-transparent animate-spin" />
               <p className="text-sm font-semibold text-teal-100">
-                Preparing BhoomiAI map
+                Preparing MaatiTrace map
               </p>
             </motion.div>
           </div>

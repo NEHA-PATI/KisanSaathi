@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, Mail, Phone, MapPin } from 'lucide-react';
 import AnimatedSection from '../components/shared/AnimatedSection';
@@ -79,10 +79,10 @@ export default function Contact() {
                                             <select value={form.interest} onChange={e => setForm({ ...form, interest: e.target.value })}
                                                 className="w-full px-3.5 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#1A9E6E] focus:ring-1 focus:ring-[#1A9E6E] transition-colors bg-white text-gray-700">
                                                 <option value="">Select a topic</option>
-                                                <option>BhoomiAI Cloud</option>
-                                                <option>BhoomiAI Apps</option>
-                                                <option>BhoomiAI Intelligence</option>
-                                                <option>BhoomiAI Sage</option>
+                                                <option>MaatiTrace Cloud</option>
+                                                <option>MaatiTrace Apps</option>
+                                                <option>MaatiTrace Intelligence</option>
+                                                <option>MaatiTrace Sage</option>
                                                 <option>General Inquiry</option>
                                             </select>
                                         </div>
@@ -105,8 +105,8 @@ export default function Contact() {
                                 <div>
                                     <h3 className="text-lg font-bold text-[#0D1B2A] mb-2">Get in Touch</h3>
                                     <div className="space-y-3">
-                                        <a href="mailto:hello@bhoomiai.com" className="flex items-center gap-3 text-gray-500 hover:text-[#1A9E6E] transition-colors text-sm">
-                                            <Mail className="w-4 h-4 text-[#1A9E6E]" /> hello@bhoomiai.com
+                                        <a href="mailto:hello@MaatiTrace.com" className="flex items-center gap-3 text-gray-500 hover:text-[#1A9E6E] transition-colors text-sm">
+                                            <Mail className="w-4 h-4 text-[#1A9E6E]" /> hello@MaatiTrace.com
                                         </a>
                                         <a href="tel:+918042121212" className="flex items-center gap-3 text-gray-500 hover:text-[#1A9E6E] transition-colors text-sm">
                                             <Phone className="w-4 h-4 text-[#1A9E6E]" /> +91 80 4212 1212

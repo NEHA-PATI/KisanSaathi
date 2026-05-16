@@ -39,6 +39,12 @@
 
 html { scroll-behavior: smooth; }
 
+.bhoomi-land-page {
+  background:
+    linear-gradient(180deg, rgb(3 19 13), rgb(2 10 8) 42%, rgb(3 19 13)),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.025) 0 1px, transparent 1px 72px);
+}
+
 /* Cropin-exact colors */
 :root {
   --cropin-green: #1A9E6E;
@@ -49,63 +55,314 @@ html { scroll-behavior: smooth; }
 }
 
 .leaflet-container {
-  background: #e8f4df;
+  background: linear-gradient(135deg, #f0fdf4 0%, #f5f3ff 100%);
   font-family: 'Inter', sans-serif;
 }
 
 .leaflet-control-zoom {
-  border: 1px solid rgb(255 255 255 / 0.12) !important;
+  border: 1px solid rgb(5 150 105 / 0.2) !important;
   overflow: hidden;
   border-radius: 8px !important;
-  box-shadow: 0 24px 60px rgb(0 0 0 / 0.3) !important;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.1) !important;
 }
 
 .leaflet-control-zoom a {
   width: 38px !important;
   height: 38px !important;
-  background: rgb(2 6 23 / 0.72) !important;
-  color: white !important;
-  border-color: rgb(255 255 255 / 0.1) !important;
+  background: rgb(255 255 255 / 0.9) !important;
+  color: rgb(5 150 105) !important;
+  border-color: rgb(5 150 105 / 0.2) !important;
   line-height: 36px !important;
-  backdrop-filter: blur(18px);
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.leaflet-control-zoom a:hover {
+  background: rgb(5 150 105 / 0.1) !important;
+  color: rgb(5 150 105 / 0.8) !important;
 }
 
 .leaflet-control-attribution {
-  background: rgb(2 6 23 / 0.5) !important;
-  color: rgb(203 213 225 / 0.8) !important;
-  backdrop-filter: blur(12px);
+  background: rgb(255 255 255 / 0.9) !important;
+  color: rgb(71 85 105) !important;
+  border-radius: 6px !important;
+  backdrop-filter: blur(8px);
+  font-size: 11px !important;
 }
 
 .leaflet-control-attribution a {
-  color: rgb(153 246 228) !important;
+  color: rgb(5 150 105) !important;
+  font-weight: 600;
 }
 
 .bhoomi-polygon {
   transition: fill-opacity 160ms ease, opacity 160ms ease, stroke-width 160ms ease;
 }
 
+.bhoomi-district-boundary {
+  filter: drop-shadow(0 4px 16px rgba(15, 118, 110, 0.16));
+}
+
+.bhoomi-district-label {
+  background: rgba(255, 255, 255, 0.9);
+  color: #064e3b;
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+  pointer-events: none;
+}
+
 .bhoomi-drawn-polygon {
-  filter: drop-shadow(0 0 12px rgb(45 212 191 / 0.75));
+  filter:
+    drop-shadow(0 0 2px rgb(255 255 255 / 0.95))
+    drop-shadow(0 0 8px rgb(255 59 48 / 0.88));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bhoomi-drawn-polygon-glow {
+  filter: drop-shadow(0 0 9px rgb(255 214 10 / 0.36));
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bhoomi-covered-cell {
+  mix-blend-mode: screen;
+  transition: fill-opacity 140ms ease, opacity 140ms ease;
+}
+
+.bhoomi-grid-cell {
+  filter:
+    drop-shadow(0 0 1px rgb(255 255 255 / 0.52))
+    drop-shadow(0 1px 2px rgb(0 0 0 / 0.62));
+  stroke-linecap: square;
+  transition: fill-opacity 140ms ease, stroke-width 140ms ease, opacity 140ms ease;
+}
+
+.bhoomi-grid-cell-hover {
+  filter:
+    drop-shadow(0 0 2px rgb(255 255 255 / 0.84))
+    drop-shadow(0 0 7px rgb(255 214 10 / 0.92));
+}
+
+.bhoomi-partial-label {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(var(--bhoomi-label-scale, 1));
+  transform-origin: center;
+  transition: opacity 120ms ease, transform 120ms ease;
+  white-space: nowrap;
+}
+
+.bhoomi-partial-label span {
+  color: #FFF176;
+  font-size: calc(0.82rem * var(--bhoomi-label-scale, 1));
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  paint-order: stroke fill;
+  -webkit-text-stroke: calc(1.2px * var(--bhoomi-label-scale, 1)) #000000;
+  text-shadow:
+    0 1px 0 #000000,
+    1px 0 0 #000000,
+    0 -1px 0 #000000,
+    -1px 0 0 #000000,
+    0 2px 8px rgb(0 0 0 / 0.7);
+}
+
+.bhoomi-hide-partial-labels .bhoomi-partial-label {
+  opacity: 0;
+}
+
+.bhoomi-grid-hover-tooltip {
+  border: 1px solid rgb(255 214 10 / 0.24) !important;
+  border-radius: 6px !important;
+  background: rgb(2 6 23 / 0.82) !important;
+  color: white !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.35 !important;
+  padding: 6px 8px !important;
+  box-shadow: 0 12px 26px rgb(0 0 0 / 0.32) !important;
+  backdrop-filter: blur(12px);
+}
+
+.bhoomi-grid-hover-tooltip::before {
+  display: none !important;
+}
+
+.bhoomi-grid-popup-shell .leaflet-popup-content-wrapper {
+  overflow: hidden;
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(241, 253, 249, 0.92));
+  color: #0f172a;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(14px);
+}
+
+.bhoomi-grid-popup-shell .leaflet-popup-content {
+  margin: 0;
+  width: 240px !important;
+}
+
+.bhoomi-grid-popup-shell .leaflet-popup-tip {
+  background: rgba(255, 255, 255, 0.98);
+  filter: drop-shadow(0 10px 20px rgba(15, 23, 42, 0.08));
+}
+
+.bhoomi-grid-popup {
+  padding: 16px;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.bhoomi-grid-popup__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bhoomi-grid-popup__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: #d1fae5;
+  color: #166534;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bhoomi-grid-popup__header strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.15rem;
+  line-height: 1.1;
+  color: #064e3b;
+}
+
+.bhoomi-grid-popup__level {
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.bhoomi-grid-popup__level.is-low {
+  color: #115e59;
+  background: #dcfce7;
+}
+
+.bhoomi-grid-popup__level.is-high {
+  color: #92400e;
+  background: #fef3c7;
+}
+
+.bhoomi-grid-popup__meter {
+  height: 10px;
+  overflow: hidden;
+  margin-top: 14px;
+  border-radius: 999px;
+  background: #dcfce7;
+}
+
+.bhoomi-grid-popup__meter i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #22c55e, #14b8a6);
+  box-shadow: 0 0 16px rgba(20, 184, 166, 0.22);
+}
+
+.bhoomi-grid-popup__summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+  padding: 14px;
+  background: rgba(236, 253, 245, 0.84);
+  border: 1px solid rgba(16, 185, 129, 0.12);
+  border-radius: 18px;
+}
+
+.bhoomi-grid-popup__summary div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bhoomi-grid-popup__summary span {
+  color: #475569;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.bhoomi-grid-popup__summary strong {
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.bhoomi-map-debug {
+  border: 1px solid rgb(255 214 10 / 0.35);
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgb(2 6 23 / 0.82), rgb(8 47 35 / 0.78));
+  color: #FFF176;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 7px 10px;
+  pointer-events: none;
+  text-shadow: 0 1px 2px black;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(10px);
 }
 
 .bhoomi-draw-point {
   display: flex;
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
   align-items: center;
   justify-content: center;
-  border: 2px solid white;
+  border: 2px solid #FFF176;
   border-radius: 999px;
-  background: #059669;
-  color: white;
+  background:
+    radial-gradient(circle at 35% 28%, rgb(255 255 255 / 0.45), transparent 22%),
+    linear-gradient(145deg, #0F766E, #022C22);
+  color: #ECFEFF;
   font-size: 12px;
   font-weight: 800;
-  box-shadow: 0 8px 22px rgb(6 95 70 / 0.35);
+  box-shadow:
+    0 0 0 4px rgb(20 184 166 / 0.18),
+    0 8px 22px rgb(6 95 70 / 0.35);
 }
 
 .bhoomi-draw-point-selected {
-  background: #0f172a;
-  box-shadow: 0 0 0 4px rgb(45 212 191 / 0.28), 0 10px 24px rgb(15 23 42 / 0.35);
+  border-color: white;
+  background:
+    radial-gradient(circle at 35% 28%, rgb(255 255 255 / 0.55), transparent 22%),
+    linear-gradient(145deg, #F97316, #991B1B);
+  box-shadow:
+    0 0 0 5px rgb(249 115 22 / 0.26),
+    0 10px 24px rgb(15 23 42 / 0.35);
+}
+
+.bhoomi-draw-line {
+  filter: drop-shadow(0 0 5px rgb(255 214 10 / 0.55));
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .leaflet-draw-tooltip {

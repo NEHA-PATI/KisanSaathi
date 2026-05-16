@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+﻿import { useState, useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -9,7 +9,7 @@ const slides = [
         label: null,
         title: ["World's largest deployed ", 'AI platform', ' for food and agriculture'],
         titleHighlight: 1,
-        desc: "As the world's most advanced AI-first agri-food platform, BhoomiAI helps businesses transform food production at scale with the power of regional, plot-level, and climate intelligence.",
+        desc: "As the world's most advanced AI-first agri-food platform, MaatiTrace helps businesses transform food production at scale with the power of regional, plot-level, and climate intelligence.",
         cta: 'Know more about us',
         ctaPath: '/about',
     },
@@ -18,8 +18,8 @@ const slides = [
         label: null,
         title: ['Farming for the future needs a ', 'whole new kind of power', ''],
         titleHighlight: 1,
-        desc: 'BhoomiAI Cloud, the future of farming unleashed. BhoomiAI has combined over a decade of expertise in the global agri-food industry to build BhoomiAI Cloud – a multi-tenant, secure, scalable, flexible, and intelligent agriculture cloud platform.',
-        cta: 'Explore BhoomiAI Cloud',
+        desc: 'MaatiTrace Cloud, the future of farming unleashed. MaatiTrace has combined over a decade of expertise in the global agri-food industry to build MaatiTrace Cloud â€“ a multi-tenant, secure, scalable, flexible, and intelligent agriculture cloud platform.',
+        cta: 'Explore MaatiTrace Cloud',
         ctaPath: '/products',
     },
     {
@@ -27,14 +27,14 @@ const slides = [
         label: null,
         title: ['', 'All-in-one solution', ' for farming, sourcing, and supply chain resilience'],
         titleHighlight: 1,
-        desc: "Whether you're grappling with climate challenges, ensuring surety of supply, meeting demand for sustainably sourced food, or advancing regenerative agriculture — BhoomiAI is your trusted partner in transforming agri-food operations.",
+        desc: "Whether you're grappling with climate challenges, ensuring surety of supply, meeting demand for sustainably sourced food, or advancing regenerative agriculture â€” MaatiTrace is your trusted partner in transforming agri-food operations.",
         cta: 'Explore our solutions',
         ctaPath: '/solutions',
     },
     {
         bg: 'https://media.base44.com/images/public/69f0e05492655c5c8658c4e3/7affef9a0_generated_0dc0da7b.png',
         label: null,
-        title: ['Decode the past, analyze the present, and predict the future of food with ', 'BhoomiAI', ''],
+        title: ['Decode the past, analyze the present, and predict the future of food with ', 'MaatiTrace', ''],
         titleHighlight: 1,
         desc: "The old sourcing and supply playbook wasn't built for a world of climate and geopolitical volatility. With our predictive and actionable insights, unlock the upcoming season's yield potential and make innovation your new routine.",
         cta: 'Learn more',

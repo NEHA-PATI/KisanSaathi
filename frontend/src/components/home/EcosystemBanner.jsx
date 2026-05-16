@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export default function EcosystemBanner() {
@@ -13,16 +13,16 @@ export default function EcosystemBanner() {
                     className="max-w-3xl mx-auto text-center"
                 >
                     <h2 className="text-2xl md:text-3xl font-bold text-[#0D1B2A] mb-4 leading-snug">
-                        BhoomiAI Debuts 'AI-First Digital Transformation Ecosystem' to Unify Fragmented Food Systems
+                        MaatiTrace Debuts 'AI-First Digital Transformation Ecosystem' to Unify Fragmented Food Systems
                     </h2>
                     <p className="text-gray-500 text-base mb-6 leading-relaxed">
-                        More Than a Decade in the Making, BhoomiAI's Flagship Initiative Unites Google, BCG, Wipro, The Weather Company, and Planet Labs to Power the 21st-Century, Resilient, and Sustainable Food System.
+                        More Than a Decade in the Making, MaatiTrace's Flagship Initiative Unites Google, BCG, Wipro, The Weather Company, and Planet Labs to Power the 21st-Century, Resilient, and Sustainable Food System.
                     </p>
                     <Link
                         to="/about"
                         className="inline-flex items-center gap-2 text-[#1A9E6E] font-semibold text-sm hover:underline transition-colors"
                     >
-                        Read more →
+                        Read more â†’
                     </Link>
                 </motion.div>
             </div>

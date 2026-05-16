@@ -70,10 +70,13 @@ const DrawControl = memo(function DrawControl({ map }) {
       L.polyline(
         drawPoints.map((point) => [point.lat, point.lng]),
         {
-          color: "#0f766e",
-          weight: 3,
-          dashArray: drawPoints.length < 3 ? "6 8" : undefined,
-          opacity: 0.9,
+          color: "#F97316",
+          weight: 4,
+          dashArray: drawPoints.length < 3 ? "2 10" : "10 8",
+          lineCap: "round",
+          lineJoin: "round",
+          opacity: 0.95,
+          className: "bhoomi-draw-line",
         }
       ).addTo(drawLayerRef.current);
     }
@@ -83,10 +86,13 @@ const DrawControl = memo(function DrawControl({ map }) {
       const polygon = L.polygon(
         drawPoints.map((point) => [point.lat, point.lng]),
         {
-          color: "#14b8a6",
-          fillColor: "#14b8a6",
-          fillOpacity: 0.22,
-          weight: 3,
+          color: "#FF3B30",
+          fillColor: "#24D6A4",
+          fillOpacity: 0.12,
+          weight: 4,
+          dashArray: "10 8 2 8",
+          lineCap: "round",
+          lineJoin: "round",
           className: "bhoomi-drawn-polygon",
           bubblingMouseEvents: false,
         }

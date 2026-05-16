@@ -48,10 +48,10 @@ export const getLayerColor = (properties, layer) => {
 
 export const polygonStyle = (feature, layer) => ({
   color: getLayerColor(feature?.properties, layer),
-  weight: 1.15,
-  opacity: 0.95,
+  weight: 1.35,
+  opacity: 0.82,
   fillColor: getLayerColor(feature?.properties, layer),
-  fillOpacity: 0.5,
+  fillOpacity: 0.24,
   className: "bhoomi-polygon",
 });
 

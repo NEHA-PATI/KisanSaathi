@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Search, Menu, X, Globe } from 'lucide-react';
@@ -7,10 +7,10 @@ const navItems = [
     {
         label: 'Products',
         submenu: [
-            { label: 'BhoomiAI Cloud', path: '/products#cloud' },
-            { label: 'BhoomiAI Apps', path: '/products#apps' },
-            { label: 'BhoomiAI Intelligence', path: '/products#intelligence' },
-            { label: 'BhoomiAI Sage', path: '/products#sage' },
+            { label: 'MaatiTrace Cloud', path: '/products#cloud' },
+            { label: 'MaatiTrace Apps', path: '/products#apps' },
+            { label: 'MaatiTrace Intelligence', path: '/products#intelligence' },
+            { label: 'MaatiTrace Sage', path: '/products#sage' },
         ]
     },
     {
@@ -73,7 +73,7 @@ export default function Navbar() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-[68px]">
 
-                        {/* Logo - BhoomiAI styled like Cropin */}
+                        {/* Logo - MaatiTrace styled like Cropin */}
                         <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
                             <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M20 4C11.163 4 4 11.163 4 20C4 28.837 11.163 36 20 36C28.837 36 36 28.837 36 20C36 11.163 28.837 4 20 4Z" fill="#1A9E6E" fillOpacity="0.15" />
@@ -83,7 +83,7 @@ export default function Navbar() {
                                 <circle cx="26" cy="13" r="2.5" fill="#2DD4BF" />
                             </svg>
                             <span className="text-xl font-bold tracking-tight">
-                                <span className="text-[#1A9E6E]">Bhoomi</span>
+                                <span className="text-[#1A9E6E]">Maati</span>
                                 <span className="text-[#2DD4BF]">AI</span>
                             </span>
                         </Link>

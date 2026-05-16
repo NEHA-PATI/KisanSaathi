@@ -1,4 +1,4 @@
-import CountUpNumber from '../shared/CountUpNumber';
+﻿import CountUpNumber from '../shared/CountUpNumber';
 
 const badges = [
     { value: 78, suffix: '%+', label: 'accuracy' },
@@ -38,7 +38,7 @@ export default function CroplandSection() {
                             We compute <span className="text-[#1A9E6E]">10%</span> of world's croppable land
                         </h2>
                         <p className="text-gray-500 text-base leading-relaxed">
-                            Just as Bloomberg decodes balance sheets and income statements for capital markets, BhoomiAI decodes the biological balance sheet of food-agri, helping predict production, supply risks, sustainability, and future value.
+                            Just as Bloomberg decodes balance sheets and income statements for capital markets, MaatiTrace decodes the biological balance sheet of food-agri, helping predict production, supply risks, sustainability, and future value.
                         </p>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import { memo } from "react";
+﻿import { memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Activity, Droplets, ShieldCheck, Sprout } from "lucide-react";
 
@@ -48,7 +48,7 @@ const AnalyzePanel = memo(function AnalyzePanel() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 36 }}
           transition={{ type: "spring", stiffness: 190, damping: 24 }}
-          className="absolute right-4 top-4 z-[520] max-h-[calc(100vh-2rem)] w-[340px] overflow-hidden rounded-lg border border-emerald-100 bg-white/92 text-slate-900 shadow-2xl shadow-emerald-950/15 backdrop-blur-2xl"
+          className="absolute right-4 top-4 z-[520] max-h-[calc(100vh-2rem)] w-[340px] overflow-hidden rounded-lg border border-emerald-900/10 bg-white text-slate-900 shadow-2xl shadow-emerald-950/15"
         >
           <div className="border-b border-emerald-100 p-4">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1A9E6E]">
@@ -56,7 +56,7 @@ const AnalyzePanel = memo(function AnalyzePanel() {
             </p>
             <h2 className="mt-2 text-2xl font-bold">Land Intelligence</h2>
             <p className="mt-1 text-sm text-slate-500">
-              Spatial signals from the visible BhoomiAI prediction grid.
+              Spatial signals from the visible MaatiTrace prediction grid.
             </p>
           </div>
 

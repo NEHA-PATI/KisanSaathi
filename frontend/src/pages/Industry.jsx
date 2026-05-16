@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, ArrowRight } from 'lucide-react';
 import AnimatedSection from '../components/shared/AnimatedSection';
@@ -57,7 +57,7 @@ export default function Industry() {
                             Powering every segment of the agri-food value chain
                         </h1>
                         <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-                            From seed companies to governments, BhoomiAI delivers AI-powered intelligence tailored to your specific industry needs.
+                            From seed companies to governments, MaatiTrace delivers AI-powered intelligence tailored to your specific industry needs.
                         </p>
                     </motion.div>
                 </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, ChevronRight } from 'lucide-react';
@@ -7,7 +7,7 @@ import AnimatedSection from '../components/shared/AnimatedSection';
 const products = [
     {
         id: 'apps',
-        logo: 'BhoomiAI Apps',
+        logo: 'MaatiTrace Apps',
         tagColor: '#1A9E6E',
         headline: 'Scale your farmer enablement, engagement, and digitize your global field and farm management operations',
         image: 'https://media.base44.com/images/public/69f0e05492655c5c8658c4e3/fd6ab3603_generated_dd446721.png',
@@ -43,16 +43,16 @@ const products = [
             },
         ],
         subProducts: [
-            { name: 'BhoomiAI Grow', desc: 'A farm monitoring and management solution to help you geotag your farms, digitize farm/farmer records, share advisory, monitor crop productivity, and boost field officer productivity.' },
-            { name: 'BhoomiAI Connect', desc: 'Easy-to-use, seamless communication solution connecting growers, agri-businesses, and field officers, helping digitize grower activities.' },
-            { name: 'BhoomiAI Trace', desc: 'Farm-to-fork traceability solution to track and meet quality benchmarks. Eliminate counterfeiting and ensure everyone in the supply chain is recognized and rewarded.' },
+            { name: 'MaatiTrace Grow', desc: 'A farm monitoring and management solution to help you geotag your farms, digitize farm/farmer records, share advisory, monitor crop productivity, and boost field officer productivity.' },
+            { name: 'MaatiTrace Connect', desc: 'Easy-to-use, seamless communication solution connecting growers, agri-businesses, and field officers, helping digitize grower activities.' },
+            { name: 'MaatiTrace Trace', desc: 'Farm-to-fork traceability solution to track and meet quality benchmarks. Eliminate counterfeiting and ensure everyone in the supply chain is recognized and rewarded.' },
         ],
     },
     {
         id: 'cloud',
-        logo: 'BhoomiAI Cloud',
+        logo: 'MaatiTrace Cloud',
         tagColor: '#1A9E6E',
-        headline: 'The future of farming unleashed — a multi-tenant, secure, scalable, flexible, and intelligent agriculture cloud platform',
+        headline: 'The future of farming unleashed â€” a multi-tenant, secure, scalable, flexible, and intelligent agriculture cloud platform',
         image: 'https://media.base44.com/images/public/69f0e05492655c5c8658c4e3/81639b858_generated_89e36f7b.png',
         bg: '#EAF6F1',
         subProducts: [
@@ -63,7 +63,7 @@ const products = [
     },
     {
         id: 'intelligence',
-        logo: 'BhoomiAI Intelligence',
+        logo: 'MaatiTrace Intelligence',
         tagColor: '#1A9E6E',
         headline: 'AI-powered crop and climate intelligence to decode the past, analyze the present, and predict the future of food',
         image: 'https://media.base44.com/images/public/69f0e05492655c5c8658c4e3/a5fc6b422_generated_897d50ab.png',
@@ -76,15 +76,15 @@ const products = [
     },
     {
         id: 'sage',
-        logo: 'BhoomiAI Sage',
+        logo: 'MaatiTrace Sage',
         tagColor: '#1A9E6E',
-        headline: 'Conversational AI for agriculture — answers complex agri queries using vast crop knowledge databases and real-time data',
+        headline: 'Conversational AI for agriculture â€” answers complex agri queries using vast crop knowledge databases and real-time data',
         image: 'https://media.base44.com/images/public/69f0e05492655c5c8658c4e3/a68d892b3_generated_010314da.png',
         bg: '#EAF6F1',
         subProducts: [
             { name: 'Crop Advisory AI', desc: 'Get instant, context-aware advisory on crop management, pest control, irrigation, and fertilization in natural language.' },
             { name: 'Multi-language Support', desc: 'Accessible in 20+ regional languages to empower farmers and field officers across diverse geographies.' },
-            { name: 'Knowledge Graph', desc: 'Powered by BhoomiAI\'s proprietary crop knowledge graph with data from 338+ crops and 8,750+ varieties.' },
+            { name: 'Knowledge Graph', desc: 'Powered by MaatiTrace\'s proprietary crop knowledge graph with data from 338+ crops and 8,750+ varieties.' },
         ],
     },
 ];
@@ -115,7 +115,7 @@ export default function Products() {
                 <div className="max-w-5xl mx-auto px-4 mt-10 relative">
                     <img
                         src={firstProduct.image}
-                        alt="BhoomiAI Apps"
+                        alt="MaatiTrace Apps"
                         className="w-full object-contain rounded-t-2xl shadow-xl"
                         style={{ maxHeight: 380 }}
                     />
@@ -246,7 +246,7 @@ export default function Products() {
             <section className="py-16 bg-[#1A9E6E]">
                 <div className="max-w-3xl mx-auto px-4 text-center">
                     <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Ready to transform your agri-food operations?</h2>
-                    <p className="text-white/80 mb-8">Get in touch with our team to see BhoomiAI in action.</p>
+                    <p className="text-white/80 mb-8">Get in touch with our team to see MaatiTrace in action.</p>
                     <Link to="/contact" className="inline-block px-8 py-3 bg-white text-[#1A9E6E] font-semibold rounded-full hover:bg-gray-50 transition-colors shadow-lg">
                         Request a Demo
                     </Link>

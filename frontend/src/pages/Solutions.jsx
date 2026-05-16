@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+﻿import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, ArrowRight } from 'lucide-react';
 import AnimatedSection from '../components/shared/AnimatedSection';
@@ -7,7 +7,7 @@ const solutions = [
     {
         id: 'supply-chain',
         tag: 'Supply Chain Efficiency',
-        title: 'From farm to fork — complete supply chain visibility and resilience',
+        title: 'From farm to fork â€” complete supply chain visibility and resilience',
         desc: 'Optimize your agricultural supply chain with real-time visibility, predictive analytics, and intelligent sourcing recommendations to eliminate inefficiencies and reduce costs.',
         bullets: ['End-to-end farm-to-fork traceability', 'Demand forecasting & inventory optimization', 'Supplier risk scoring & assessment', 'Quality assurance automation', 'EUDR and regulatory compliance'],
         img: 'https://media.base44.com/images/public/69f0e05492655c5c8658c4e3/e0cf675ff_generated_206998ce.png',
@@ -57,7 +57,7 @@ export default function Solutions() {
                             All-in-one solution for farming, sourcing, and supply chain resilience
                         </h1>
                         <p className="text-gray-300 text-lg max-w-2xl mx-auto leading-relaxed">
-                            Whether you're grappling with climate challenges, ensuring surety of supply, or advancing regenerative agriculture — BhoomiAI is your trusted partner.
+                            Whether you're grappling with climate challenges, ensuring surety of supply, or advancing regenerative agriculture â€” MaatiTrace is your trusted partner.
                         </p>
                     </motion.div>
                 </div>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Map, Search, ChevronDown } from 'lucide-react';
 import AnimatedSection from '../components/shared/AnimatedSection';
@@ -78,7 +78,7 @@ export default function KnowledgeGrid() {
                             The world's most comprehensive crop intelligence database
                         </h1>
                         <p className="text-gray-300 text-lg mb-10 max-w-2xl mx-auto">
-                            Access detailed intelligence across 350+ crops and 8,750+ varieties with BhoomiAI's proprietary knowledge grid.
+                            Access detailed intelligence across 350+ crops and 8,750+ varieties with MaatiTrace's proprietary knowledge grid.
                         </p>
                         {/* Search bar - exact Cropin style */}
                         <div className="max-w-lg mx-auto relative">
