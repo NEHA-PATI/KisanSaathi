@@ -1,0 +1,79 @@
+{
+  "active_district": "sambalpur",
+  "defaults": {
+    "ee_project": "agri-ai-491511",
+    "start_date": "2020-01-01",
+    "end_date": "2026-04-29",
+    "grid_cell_size_deg": 0.01,
+    "batch_size": 6000,
+    "max_active_tasks": 100,
+    "data_root": "data/districts"
+  },
+  "districts": {
+    "sambalpur": {
+      "slug": "sambalpur",
+      "name": "Sambalpur",
+      "source_boundary_path": "data/boundaries/sambalpur_boundary.geojson",
+      "drive_folders": {
+        "satellite": "AgriAI_satellite_sambalpur",
+        "weather": "AgriAI_weather_sambalpur",
+        "smap": "AgriAI_SMAP_sambalpur",
+        "et": "AgriAI_ET_sambalpur",
+        "soil": "AgriAI_soil_sambalpur",
+        "crop": "AgriAI_crop_sambalpur"
+      }
+    },
+    "angul": {
+      "slug": "angul",
+      "name": "Angul",
+      "source_boundary_path": "data/boundaries/angul_boundary.geojson",
+      "drive_folders": {
+        "satellite": "AgriAI_satellite_angul",
+        "weather": "AgriAI_weather_angul",
+        "smap": "AgriAI_SMAP_angul",
+        "et": "AgriAI_ET_angul",
+        "soil": "AgriAI_soil_angul",
+        "crop": "AgriAI_crop_angul"
+      }
+    },
+    "debagarh": {
+      "slug": "debagarh",
+      "name": "Debagarh",
+      "source_boundary_path": "data/boundaries/debagarh_boundary.geojson",
+      "drive_folders": {
+        "satellite": "AgriAI_satellite_debagarh",
+        "weather": "AgriAI_weather_debagarh",
+        "smap": "AgriAI_SMAP_debagarh",
+        "et": "AgriAI_ET_debagarh",
+        "soil": "AgriAI_soil_debagarh",
+        "crop": "AgriAI_crop_debagarh"
+      }
+    },
+    "cuttack": {
+      "slug": "cuttack",
+      "name": "Cuttack",
+      "source_boundary_path": "data/boundaries/cuttack_boundary.geojson",
+      "drive_folders": {
+        "satellite": "AgriAI_satellite_cuttack",
+        "weather": "AgriAI_weather_cuttack",
+        "smap": "AgriAI_SMAP_cuttack",
+        "et": "AgriAI_ET_cuttack",
+        "soil": "AgriAI_soil_cuttack",
+        "crop": "AgriAI_crop_cuttack"
+      }
+    },
+    "khorda": {
+      "slug": "khorda",
+      "name": "Khorda",
+      "source_boundary_path": "data/boundaries/khordha_boundary.geojson",
+      "drive_folders": {
+        "satellite": "AgriAI_satellite_khorda",
+        "weather": "AgriAI_weather_khorda",
+        "smap": "AgriAI_SMAP_khorda",
+        "et": "AgriAI_ET_khorda",
+        "soil": "AgriAI_soil_khorda",
+        "crop": "AgriAI_crop_khorda"
+      }
+    }
+  }
+}
