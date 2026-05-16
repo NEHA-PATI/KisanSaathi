@@ -1,117 +1,94 @@
-import ee
-import pandas as pd
-from datetime import datetime, timedelta
-from pathlib import Path
+import sys
 import time
+from pathlib import Path
 
-# =========================================
-# CONFIG
-# =========================================
-EE_PROJECT = "agri-ai-491511"
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-GRID_PATH = PROJECT_ROOT / "data" / "grids" / "sambalpur_grid.csv"
+import ee
 
-START_DATE = "2020-01-01"
-END_DATE = "2026-04-29"
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
 
-BATCH_SIZE = 6000
-MAX_ACTIVE_TASKS = 100
-
-ee.Initialize(project=EE_PROJECT)
-
-# =========================================
-# LOAD GRID
-# =========================================
-grid = pd.read_csv(GRID_PATH)
-
-
-# =========================================
-# WEEK GENERATOR
-# =========================================
-def generate_weeks(start, end):
-    start = datetime.strptime(start, "%Y-%m-%d")
-    end = datetime.strptime(end, "%Y-%m-%d")
-    while start <= end:
-        nxt = start + timedelta(days=7)
-        yield start, nxt
-        start = nxt
+from ingestion.ee_common import (
+    collection_or_empty,
+    export_context,
+    generate_weeks,
+    iter_batches,
+    make_fc,
+    mark_completed,
+    read_completed_tasks,
+    read_grid,
+    wait_for_task_slot,
+)
 
 
-# =========================================
-# GRID → POLYGON FC
-# =========================================
-def make_fc(batch_df):
-    feats = []
-    for _, r in batch_df.iterrows():
-        lat, lon = r["lat"], r["lon"]
-        geom = ee.Geometry.Rectangle([lon, lat, lon + 0.01, lat + 0.01])
-        feats.append(ee.Feature(geom, {"cell_id": int(r["cell_id"])}))
-    return ee.FeatureCollection(feats)
+SOURCE = "smap"
+SMAP_BANDS = ["soil_moisture_surface", "soil_moisture_root"]
 
 
-# =========================================
-# TASK CONTROL
-# =========================================
-def active_tasks():
-    tasks = ee.data.getTaskList()
-    return sum(1 for t in tasks if t["state"] in ["READY", "RUNNING"])
+def main():
+    args, config, start_date, end_date = export_context(SOURCE)
+    ee.Initialize(project=config.ee_project)
 
+    grid = read_grid(config)
+    completed_log = config.export_task_log(SOURCE)
+    completed = read_completed_tasks(completed_log)
 
-# =========================================
-# MAIN LOOP
-# =========================================
-for batch_start in range(0, len(grid), BATCH_SIZE):
+    for batch_start, batch in iter_batches(grid, config.batch_size, args.batch_start):
+        fc = make_fc(ee, batch, config.grid_cell_size_deg)
 
-    batch = grid.iloc[batch_start : batch_start + BATCH_SIZE]
-    fc = make_fc(batch)
+        for start, end in generate_weeks(start_date, end_date):
+            start_str = start.strftime("%Y-%m-%d")
+            end_str = end.strftime("%Y-%m-%d")
+            task_name = f"{config.task_prefix(SOURCE)}_b{batch_start}_{start_str}"
 
-    for start, end in generate_weeks(START_DATE, END_DATE):
+            if task_name in completed:
+                print(f"Skipping submitted task: {task_name}")
+                continue
 
-        start_str = start.strftime("%Y-%m-%d")
-        end_str = end.strftime("%Y-%m-%d")
+            wait_for_task_slot(ee, config.max_active_tasks)
+            print(f"Submitting {task_name}")
 
-        task_name = f"smap_b{batch_start}_{start_str}"
-
-        while active_tasks() > MAX_ACTIVE_TASKS:
-            print("⏳ Waiting for GEE slots...")
-            time.sleep(15)
-
-        print(f"🚀 {task_name}")
-
-        try:
-            collection = (
-                ee.ImageCollection("NASA/SMAP/SPL4SMGP/007")
-                .filterDate(start_str, end_str)
-                .select(["sm_surface", "sm_rootzone"])
-                .map(
-                    lambda img: img.rename(
-                        ["soil_moisture_surface", "soil_moisture_root"]
+            try:
+                collection = (
+                    ee.ImageCollection("NASA/SMAP/SPL4SMGP/007")
+                    .filterDate(start_str, end_str)
+                    .select(["sm_surface", "sm_rootzone"])
+                    .map(
+                        lambda img: img.rename(
+                            ["soil_moisture_surface", "soil_moisture_root"]
+                        )
                     )
                 )
-            )
-
-            image = collection.mean()
-
-            reduced = image.reduceRegions(
-                collection=fc,
-                reducer=ee.Reducer.mean(),
-                scale=10000,  # SMAP ~10km resolution
-            ).map(
-                lambda f: f.set(
-                    {"date": start_str, "year": start.year, "month": start.month}
+                image = collection_or_empty(
+                    ee,
+                    collection,
+                    lambda images: images.mean(),
+                    SMAP_BANDS,
                 )
-            )
+                reduced = image.reduceRegions(
+                    collection=fc,
+                    reducer=ee.Reducer.mean(),
+                    scale=10000,
+                ).map(
+                    lambda feature: feature.set(
+                        {"date": start_str, "year": start.year, "month": start.month}
+                    )
+                )
 
-            task = ee.batch.Export.table.toDrive(
-                collection=reduced,
-                description=task_name,
-                folder="AgriAI_SMAP",
-                fileNamePrefix=task_name,
-                fileFormat="CSV",
-            )
+                task = ee.batch.Export.table.toDrive(
+                    collection=reduced,
+                    description=task_name,
+                    folder=config.drive_folder(SOURCE),
+                    fileNamePrefix=task_name,
+                    fileFormat="CSV",
+                )
+                task.start()
+                mark_completed(completed_log, task_name)
+                completed.add(task_name)
+            except Exception as exc:
+                print(f"Error in {task_name}: {exc}")
+                time.sleep(10)
 
-            task.start()
 
-        except Exception as e:
-            print(f"❌ Error in {task_name}: {e}")
-            time.sleep(10)
+if __name__ == "__main__":
+    main()

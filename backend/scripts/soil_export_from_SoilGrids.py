@@ -1,25 +1,25 @@
-import ee
-import pandas as pd
-from pathlib import Path
+import sys
 import time
+from pathlib import Path
 
-# =========================================
-# CONFIG
-# =========================================
+import ee
 
-EE_PROJECT = "agri-ai-491511"
-GRID_PATH = Path("../data/grids/sambalpur_grid.csv")
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
+
+from ingestion.ee_common import (
+    export_context,
+    iter_batches,
+    make_fc,
+    mark_completed,
+    read_completed_tasks,
+    read_grid,
+    wait_for_task_slot,
+)
 
 
-BATCH_SIZE = 6000
-MAX_ACTIVE_TASKS = 200
-
-ee.Initialize(project=EE_PROJECT)
-
-# =========================================
-# DATASETS
-# =========================================
-
+SOURCE = "soil"
 DATASETS = {
     "phh2o": "projects/soilgrids-isric/phh2o_mean",
     "soc": "projects/soilgrids-isric/soc_mean",
@@ -28,100 +28,60 @@ DATASETS = {
     "silt": "projects/soilgrids-isric/silt_mean",
 }
 
-# =========================================
-# LOAD GRID
-# =========================================
-
-grid = pd.read_csv(GRID_PATH)
-
-# =========================================
-# GRID → POLYGON FC
-# =========================================
-
-
-def make_fc(batch_df):
-    features = []
-
-    for _, row in batch_df.iterrows():
-        lat, lon = row["lat"], row["lon"]
-
-        geom = ee.Geometry.Rectangle([lon, lat, lon + 0.01, lat + 0.01])
-
-        features.append(ee.Feature(geom, {"cell_id": int(row["cell_id"])}))
-
-    return ee.FeatureCollection(features)
-
-
-# =========================================
-# TASK CONTROL
-# =========================================
-
-
-def active_tasks():
-    tasks = ee.data.getTaskList()
-    return sum(1 for t in tasks if t["state"] in ["READY", "RUNNING"])
-
-
-# =========================================
-# BUILD STACKED IMAGE
-# =========================================
-
 
 def build_soil_image():
     bands = []
-
     for key, dataset in DATASETS.items():
         img = ee.Image(dataset)
-
-        band_names = img.bandNames()
-
-        # clean naming
-        renamed = band_names.map(
-            lambda b: ee.String(key)
+        renamed = img.bandNames().map(
+            lambda band: ee.String(key)
             .cat("_")
-            .cat(ee.String(b).replace("cm_mean", "").replace("_", ""))
+            .cat(ee.String(band).replace("cm_mean", "").replace("_", ""))
         )
-
-        img = img.rename(renamed)
-        bands.append(img)
-
+        bands.append(img.rename(renamed))
     return ee.Image.cat(bands)
 
 
-soil_image = build_soil_image()
+def main():
+    args, config, _, _ = export_context(SOURCE)
+    ee.Initialize(project=config.ee_project)
 
-# =========================================
-# MAIN LOOP
-# =========================================
+    grid = read_grid(config)
+    soil_image = build_soil_image()
+    completed_log = config.export_task_log(SOURCE)
+    completed = read_completed_tasks(completed_log)
 
-for batch_start in range(0, len(grid), BATCH_SIZE):
+    for batch_start, batch in iter_batches(grid, config.batch_size, args.batch_start):
+        task_name = f"{config.task_prefix(SOURCE)}_b{batch_start}"
 
-    batch = grid.iloc[batch_start : batch_start + BATCH_SIZE]
-    fc = make_fc(batch)
+        if task_name in completed:
+            print(f"Skipping submitted task: {task_name}")
+            continue
 
-    task_name = f"soil_b{batch_start}"
+        wait_for_task_slot(ee, config.max_active_tasks)
+        print(f"Submitting {task_name}")
 
-    while active_tasks() > MAX_ACTIVE_TASKS:
-        print("⏳ Waiting...")
-        time.sleep(15)
+        try:
+            fc = make_fc(ee, batch, config.grid_cell_size_deg)
+            reduced = soil_image.reduceRegions(
+                collection=fc,
+                reducer=ee.Reducer.mean(),
+                scale=250,
+            )
+            task = ee.batch.Export.table.toDrive(
+                collection=reduced,
+                description=task_name,
+                folder=config.drive_folder(SOURCE),
+                fileNamePrefix=task_name,
+                fileFormat="CSV",
+            )
+            task.start()
+            mark_completed(completed_log, task_name)
+            completed.add(task_name)
+        except Exception as exc:
+            print(f"Error in {task_name}: {exc}")
+            time.sleep(10)
 
-    print(f"🚀 {task_name}")
 
-    try:
-        reduced = soil_image.reduceRegions(
-            collection=fc, reducer=ee.Reducer.mean(), scale=250
-        )
-
-        task = ee.batch.Export.table.toDrive(
-            collection=reduced,
-            description=task_name,
-            folder="AgriAI_soil",
-            fileNamePrefix=task_name,
-            fileFormat="CSV",
-        )
-
-        task.start()
-
-    except Exception as e:
-        print(f"❌ Error: {e}")
-        time.sleep(10)
+if __name__ == "__main__":
+    main()

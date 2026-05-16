@@ -3,9 +3,12 @@
 # Toggle sections via flags below
 # ============================================================
 
-import pandas as pd
+import argparse
 import glob
+import sys
 from pathlib import Path
+
+import pandas as pd
 
 # =========================
 # CONFIG
@@ -13,10 +16,17 @@ from pathlib import Path
 
 BACKEND_ROOT = Path(__file__).resolve().parents[1]
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
 
-RAW_DIR = PROJECT_ROOT / "data" / "raw"
-OUT_DIR = PROJECT_ROOT / "data" / "processed"
+from ingestion.config import SOURCES, get_district_config, ensure_district_dirs
+
+CONFIG = get_district_config()
+RAW_DIR = CONFIG.raw_dir
+OUT_DIR = CONFIG.processed_dir
+INGESTION_OUT_DIR = CONFIG.ingestion_data_dir
 OUT_DIR.mkdir(parents=True, exist_ok=True)
+INGESTION_OUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # ---- Toggle which pipelines to run ----
 RUN_SATELLITE = False
@@ -33,6 +43,7 @@ RUN_FINAL_MERGE = True  # set False if you only want per-source outputs
 # =========================
 
 DROP_COMMON = ["system:index", ".geo"]
+DROP_NON_AUTHORITATIVE_KEYS = ["grid_id", "source_cell_id"]
 
 
 def _read_all(pattern):
@@ -53,7 +64,7 @@ def _read_all(pattern):
 def _finalize_ts(df):
     """Common cleanup for time-series tables"""
     # drop junk
-    df = df.drop(columns=DROP_COMMON, errors="ignore")
+    df = df.drop(columns=DROP_COMMON + DROP_NON_AUTHORITATIVE_KEYS, errors="ignore")
 
     # enforce types
     if "cell_id" in df.columns:
@@ -74,7 +85,8 @@ def _finalize_ts(df):
 
 
 def _save(df, name):
-    path = OUT_DIR / f"{name}.parquet"
+    base_dir = OUT_DIR if name in {"final"} else INGESTION_OUT_DIR
+    path = base_dir / f"{name}.parquet"
     df.to_parquet(path, index=False)
     print(f"Saved {name} -> {path}")
 
@@ -198,7 +210,7 @@ def normalize_soil():
     if df.empty:
         return df
 
-    df = df.drop(columns=DROP_COMMON, errors="ignore")
+    df = df.drop(columns=DROP_COMMON + DROP_NON_AUTHORITATIVE_KEYS, errors="ignore")
 
     # clean duplicated prefixes
     clean_cols = []
@@ -228,7 +240,7 @@ def normalize_crop():
     if df.empty:
         return df
 
-    df = df.drop(columns=DROP_COMMON, errors="ignore")
+    df = df.drop(columns=DROP_COMMON + DROP_NON_AUTHORITATIVE_KEYS, errors="ignore")
 
     # mode → crop_type
     if "mode" in df.columns:
@@ -253,7 +265,7 @@ def build_master():
 
     # read processed (if not in memory)
     def _r(name):
-        p = OUT_DIR / f"{name}.parquet"
+        p = INGESTION_OUT_DIR / f"{name}.parquet"
         if p.exists():
             return pd.read_parquet(p)
         print(f"Missing {p}, skipping")
@@ -303,16 +315,47 @@ def build_master():
 # RUN
 # =========================
 
-if __name__ == "__main__":
+def main():
+    global CONFIG, RAW_DIR, OUT_DIR, INGESTION_OUT_DIR
 
-    sat = normalize_satellite() if RUN_SATELLITE else None
-    wea = normalize_weather() if RUN_WEATHER else None
-    smp = normalize_smap() if RUN_SMAP else None
-    et = normalize_et() if RUN_ET else None
-    sol = normalize_soil() if RUN_SOIL else None
-    crp = normalize_crop() if RUN_CROP else None
+    parser = argparse.ArgumentParser(description="Normalize district raw ingestion CSVs.")
+    parser.add_argument("--district", help="District key from district_config.json")
+    parser.add_argument(
+        "--sources",
+        nargs="+",
+        choices=SOURCES,
+        default=list(SOURCES),
+        help="Raw sources to normalize.",
+    )
+    parser.add_argument("--no-final-merge", action="store_true")
+    args = parser.parse_args()
 
-    if RUN_FINAL_MERGE:
+    CONFIG = get_district_config(args.district)
+    ensure_district_dirs(CONFIG)
+    RAW_DIR = CONFIG.raw_dir
+    OUT_DIR = CONFIG.processed_dir
+    INGESTION_OUT_DIR = CONFIG.ingestion_data_dir
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    INGESTION_OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+    if "satellite" in args.sources:
+        normalize_satellite()
+    if "weather" in args.sources:
+        normalize_weather()
+    if "smap" in args.sources:
+        normalize_smap()
+    if "et" in args.sources:
+        normalize_et()
+    if "soil" in args.sources:
+        normalize_soil()
+    if "crop" in args.sources:
+        normalize_crop()
+
+    if not args.no_final_merge:
         build_master()
 
     print("\nDone.")
+
+
+if __name__ == "__main__":
+    main()

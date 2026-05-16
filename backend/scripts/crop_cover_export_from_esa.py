@@ -1,83 +1,67 @@
-import ee
-import pandas as pd
-from pathlib import Path
+import sys
 import time
+from pathlib import Path
 
-# =========================================
-# CONFIG
-# =========================================
-EE_PROJECT = "agri-ai-491511"
+import ee
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-GRID_PATH = PROJECT_ROOT / "data" / "grids" / "sambalpur_grid.csv"
+BACKEND_ROOT = Path(__file__).resolve().parents[1]
+if str(BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(BACKEND_ROOT))
 
-BATCH_SIZE = 6000
-MAX_ACTIVE_TASKS = 100
-
-ee.Initialize(project=EE_PROJECT)
-
-# =========================================
-# LOAD GRID
-# =========================================
-grid = pd.read_csv(GRID_PATH)
-
-
-# =========================================
-# GRID → POLYGON FC
-# =========================================
-def make_fc(batch_df):
-    feats = []
-    for _, r in batch_df.iterrows():
-        lat, lon = r["lat"], r["lon"]
-        geom = ee.Geometry.Rectangle([lon, lat, lon + 0.01, lat + 0.01])
-        feats.append(ee.Feature(geom, {"cell_id": int(r["cell_id"])}))
-    return ee.FeatureCollection(feats)
+from ingestion.ee_common import (
+    export_context,
+    iter_batches,
+    make_fc,
+    mark_completed,
+    read_completed_tasks,
+    read_grid,
+    wait_for_task_slot,
+)
 
 
-# =========================================
-# TASK CONTROL
-# =========================================
-def active_tasks():
-    tasks = ee.data.getTaskList()
-    return sum(1 for t in tasks if t["state"] in ["READY", "RUNNING"])
+SOURCE = "crop"
 
 
-# =========================================
-# LAND COVER IMAGE
-# =========================================
-image = ee.ImageCollection("ESA/WorldCover/v100").first().select("Map")
+def main():
+    args, config, _, _ = export_context(SOURCE)
+    ee.Initialize(project=config.ee_project)
 
-# =========================================
-# MAIN LOOP
-# =========================================
-for batch_start in range(0, len(grid), BATCH_SIZE):
+    grid = read_grid(config)
+    image = ee.ImageCollection("ESA/WorldCover/v100").first().select("Map")
+    completed_log = config.export_task_log(SOURCE)
+    completed = read_completed_tasks(completed_log)
 
-    batch = grid.iloc[batch_start : batch_start + BATCH_SIZE]
-    fc = make_fc(batch)
+    for batch_start, batch in iter_batches(grid, config.batch_size, args.batch_start):
+        task_name = f"{config.task_prefix(SOURCE)}_map_b{batch_start}"
 
-    task_name = f"crop_map_b{batch_start}"
+        if task_name in completed:
+            print(f"Skipping submitted task: {task_name}")
+            continue
 
-    while active_tasks() > MAX_ACTIVE_TASKS:
-        print("⏳ Waiting...")
-        time.sleep(15)
+        wait_for_task_slot(ee, config.max_active_tasks)
+        print(f"Submitting {task_name}")
 
-    print(f"🚀 {task_name}")
+        try:
+            fc = make_fc(ee, batch, config.grid_cell_size_deg)
+            reduced = image.reduceRegions(
+                collection=fc,
+                reducer=ee.Reducer.mode(),
+                scale=10,
+            )
+            task = ee.batch.Export.table.toDrive(
+                collection=reduced,
+                description=task_name,
+                folder=config.drive_folder(SOURCE),
+                fileNamePrefix=task_name,
+                fileFormat="CSV",
+            )
+            task.start()
+            mark_completed(completed_log, task_name)
+            completed.add(task_name)
+        except Exception as exc:
+            print(f"Error in {task_name}: {exc}")
+            time.sleep(10)
 
-    try:
-        reduced = image.reduceRegions(
-            collection=fc, reducer=ee.Reducer.mode(), scale=10  # dominant class in grid
-        )
 
-        task = ee.batch.Export.table.toDrive(
-            collection=reduced,
-            description=task_name,
-            folder="AgriAI_crop",
-            fileNamePrefix=task_name,
-            fileFormat="CSV",
-        )
-
-        task.start()
-
-    except Exception as e:
-        print(f"❌ Error: {e}")
-        time.sleep(10)
+if __name__ == "__main__":
+    main()
