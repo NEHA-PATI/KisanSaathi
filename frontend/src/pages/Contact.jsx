@@ -105,8 +105,8 @@ export default function Contact() {
                                 <div>
                                     <h3 className="text-lg font-bold text-[#0D1B2A] mb-2">Get in Touch</h3>
                                     <div className="space-y-3">
-                                        <a href="mailto:hello@MaatiTrace.com" className="flex items-center gap-3 text-gray-500 hover:text-[#1A9E6E] transition-colors text-sm">
-                                            <Mail className="w-4 h-4 text-[#1A9E6E]" /> hello@MaatiTrace.com
+                                        <a href="mailto:hello@maatitrace.com" className="flex items-center gap-3 text-gray-500 hover:text-[#1A9E6E] transition-colors text-sm">
+                                            <Mail className="w-4 h-4 text-[#1A9E6E]" /> hello@maatitrace.com
                                         </a>
                                         <a href="tel:+918042121212" className="flex items-center gap-3 text-gray-500 hover:text-[#1A9E6E] transition-colors text-sm">
                                             <Phone className="w-4 h-4 text-[#1A9E6E]" /> +91 80 4212 1212

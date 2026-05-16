@@ -82,9 +82,8 @@ export default function Navbar() {
                                 <path d="M14 20C14 20 17 14 24 13C24 13 26 20 20 24C20 24 16 22 14 20Z" fill="#1A9E6E" />
                                 <circle cx="26" cy="13" r="2.5" fill="#2DD4BF" />
                             </svg>
-                            <span className="text-xl font-bold tracking-tight">
-                                <span className="text-[#1A9E6E]">Maati</span>
-                                <span className="text-[#2DD4BF]">AI</span>
+                            <span className="text-xl font-bold tracking-tight text-[#1A9E6E]">
+                                MaatiTrace
                             </span>
                         </Link>
 
