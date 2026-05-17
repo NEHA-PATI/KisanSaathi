@@ -207,7 +207,7 @@ ON farmer_land (district_slug);
 
 CREATE TABLE IF NOT EXISTS land_grid_overlap (
     land_id integer NOT NULL REFERENCES farmer_land(land_id) ON DELETE CASCADE,
-    grid_id text NOT NULL REFERENCES prediction_grid_cells(grid_id) ON DELETE CASCADE,
+    grid_id text NOT NULL,
     district_slug text NOT NULL,
     cell_id integer NOT NULL,
     overlap_ratio double precision NOT NULL,
@@ -252,9 +252,7 @@ ALTER COLUMN overlap_area_m2 SET NOT NULL;
 CREATE UNIQUE INDEX IF NOT EXISTS land_grid_overlap_unique_cell_idx
 ON land_grid_overlap (land_id, district_slug, cell_id);
 
-CREATE UNIQUE INDEX IF NOT EXISTS land_grid_overlap_unique_grid_idx
-ON land_grid_overlap (land_id, grid_id)
-;
+DROP INDEX IF EXISTS land_grid_overlap_unique_grid_idx;
 
 CREATE INDEX IF NOT EXISTS land_grid_overlap_land_idx
 ON land_grid_overlap (land_id);

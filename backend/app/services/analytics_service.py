@@ -40,6 +40,7 @@ def generate_land_snapshot(land_id, snapshot_date):
             ON fl.land_id = lgo.land_id
         JOIN agri_predictions ag
             ON ag.grid_id = lgo.grid_id
+            AND ag.district_slug = lgo.district_slug
             AND ag.prediction_date = :snapshot_date
         WHERE lgo.land_id = :land_id
         GROUP BY fl.land_id
@@ -93,6 +94,7 @@ def latest_prediction_date_for_land(land_id):
         FROM land_grid_overlap lgo
         JOIN agri_predictions ag
             ON ag.grid_id = lgo.grid_id
+            AND ag.district_slug = lgo.district_slug
         WHERE lgo.land_id = :land_id
         """
     )
@@ -114,6 +116,7 @@ def generate_all_land_snapshots(land_id, start_date=None, end_date=None):
         FROM land_grid_overlap lgo
         JOIN agri_predictions ag
             ON ag.grid_id = lgo.grid_id
+            AND ag.district_slug = lgo.district_slug
         WHERE lgo.land_id = :land_id
     """
     params = {"land_id": land_id}
@@ -261,8 +264,10 @@ def get_land_overlaps(land_id, snapshot_date=None):
             ON fl.land_id = lgo.land_id
         JOIN prediction_grid_cells gc
             ON gc.grid_id = lgo.grid_id
+            AND gc.district_slug = lgo.district_slug
         LEFT JOIN agri_predictions ag
             ON ag.grid_id = lgo.grid_id
+            AND ag.district_slug = lgo.district_slug
             {date_filter}
         WHERE lgo.land_id = :land_id
         ORDER BY lgo.overlap_ratio DESC, lgo.cell_id

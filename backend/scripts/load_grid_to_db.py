@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -16,6 +17,8 @@ from schema_utils import apply_schema_file, global_grid_id
 
 
 def apply_schema():
+    if os.getenv("SKIP_SCHEMA") == "1":
+        return
     apply_schema_file(engine, BACKEND_ROOT / "db" / "schema.sql")
 
 

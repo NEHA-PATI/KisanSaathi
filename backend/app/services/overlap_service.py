@@ -48,7 +48,7 @@ def compute_overlap(land_id):
     WHERE fl.land_id = :land_id
     AND NOT ST_IsEmpty(ST_Intersection(fl.geom, gc.geom))
 
-    ON CONFLICT (land_id, grid_id)
+    ON CONFLICT (land_id, district_slug, cell_id)
     DO UPDATE SET
         district_slug = EXCLUDED.district_slug,
         cell_id = EXCLUDED.cell_id,
