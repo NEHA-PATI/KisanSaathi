@@ -18,6 +18,7 @@ build/
 .vscode/
 
 # data
+data/districts/
 *.csv
 *.parquet
 *.h5
