@@ -17,6 +17,22 @@ DB_PASSWORD = os.getenv("DB_PASSWORD")
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if not DATABASE_URL:
+    missing = [
+        name
+        for name, value in {
+            "DB_HOST": DB_HOST,
+            "DB_NAME": DB_NAME,
+            "DB_USER": DB_USER,
+            "DB_PASSWORD": DB_PASSWORD,
+        }.items()
+        if not value
+    ]
+    if missing:
+        raise RuntimeError(
+            "Database configuration is incomplete. Set DATABASE_URL or these variables: "
+            + ", ".join(missing)
+        )
+
     DATABASE_URL = URL.create(
         "postgresql+psycopg2",
         username=DB_USER,
@@ -37,7 +53,7 @@ SessionLocal = sessionmaker(
     bind=engine,
 )
 
-print("Database connected")
+print("Database engine configured")
 
 
 def get_db():

@@ -9,24 +9,27 @@ services:
       - key: ENVIRONMENT
         scope: run
         value: production
+      - key: DATABASE_URL
+        scope: run
+        sync: false
       - key: DB_HOST
         scope: run
-        value: ${DB_HOST}
+        sync: false
       - key: DB_PORT
         scope: run
-        value: ${DB_PORT}
+        sync: false
       - key: DB_NAME
         scope: run
-        value: ${DB_NAME}
+        sync: false
       - key: DB_USER
         scope: run
-        value: ${DB_USER}
+        sync: false
       - key: DB_PASSWORD
         scope: run
-        value: ${DB_PASSWORD}
-      - key: FRONTEND_URL
+        sync: false
+      - key: FRONTEND_URLS
         scope: run
-        value: ${FRONTEND_URL}
+        sync: false
     region: oregon
     maxInstances: 1
     healthCheckPath: /
@@ -38,10 +41,10 @@ services:
     buildCommand: cd frontend && npm install && npm run build
     staticPublishPath: frontend/dist
     routes:
-      - path: /
+      - path: /*
         destination: /index.html
     region: oregon
     envVars:
       - key: VITE_API_BASE_URL
         scope: build
-        value: ${VITE_API_BASE_URL}
+        sync: false

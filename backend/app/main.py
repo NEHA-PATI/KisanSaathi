@@ -10,13 +10,17 @@ from app.routes.trends import router as trends_router
 
 app = FastAPI()
 
+def env_list(name: str) -> list[str]:
+    return [value.strip() for value in os.getenv(name, "").split(",") if value.strip()]
+
+
 allowed_origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
     "https://maatitrace.in",
     "https://www.maatitrace.in",
-    "https://api.maatitrace.in",
-    os.getenv("FRONTEND_URL", ""),
+    *env_list("FRONTEND_URL"),
+    *env_list("FRONTEND_URLS"),
 ]
 allowed_origins = [origin for origin in allowed_origins if origin]
 

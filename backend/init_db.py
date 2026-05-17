@@ -47,7 +47,7 @@ def init_database():
             print("✓ PostGIS extension enabled")
         
         # Read and execute schema file
-        schema_file = Path(__file__).parent / 'backend' / 'db' / 'schema.sql'
+        schema_file = Path(__file__).parent / 'db' / 'schema.sql'
         
         if not schema_file.exists():
             print(f"⚠ Schema file not found: {schema_file}")
