@@ -2,6 +2,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronDown, Search, Menu, X, Globe } from 'lucide-react';
+import maatiAiLogo from '@/assets/maati-ai-logo.svg';
 
 const navItems = [
     {
@@ -74,17 +75,11 @@ export default function Navbar() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-[68px]">
 
-                        {/* Logo - MaatiTrace styled like Cropin */}
+                        {/* Logo */}
                         <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
-                            <svg width="32" height="32" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M20 4C11.163 4 4 11.163 4 20C4 28.837 11.163 36 20 36C28.837 36 36 28.837 36 20C36 11.163 28.837 4 20 4Z" fill="#1A9E6E" fillOpacity="0.15" />
-                                <path d="M20 8C13.373 8 8 13.373 8 20C8 26.627 13.373 32 20 32" stroke="#1A9E6E" strokeWidth="2.5" strokeLinecap="round" />
-                                <path d="M20 8C26.627 8 32 13.373 32 20C32 26.627 26.627 32 20 32" stroke="#2DD4BF" strokeWidth="2.5" strokeLinecap="round" />
-                                <path d="M14 20C14 20 17 14 24 13C24 13 26 20 20 24C20 24 16 22 14 20Z" fill="#1A9E6E" />
-                                <circle cx="26" cy="13" r="2.5" fill="#2DD4BF" />
-                            </svg>
-                            <span className="text-xl font-bold tracking-tight text-[#1A9E6E]">
-                                MaatiTrace
+                            <img src={maatiAiLogo} alt="MaatiAI" className="h-9 w-9 rounded-full" />
+                            <span className="text-xl font-bold tracking-tight text-[#a96535]">
+                                MaatiAI
                             </span>
                         </Link>
 

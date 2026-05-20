@@ -1,5 +1,6 @@
 ﻿import { Link } from 'react-router-dom';
 import { BriefcaseBusiness, Camera, MessageCircle, Play, Users } from 'lucide-react';
+import maatiAiLogo from '@/assets/maati-ai-logo.svg';
 
 export default function Footer() {
     return (
@@ -9,14 +10,9 @@ export default function Footer() {
                     {/* Brand */}
                     <div className="col-span-2 md:col-span-1">
                         <Link to="/" className="flex items-center gap-1.5 mb-5">
-                            <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
-                                <path d="M20 8C13.373 8 8 13.373 8 20C8 26.627 13.373 32 20 32" stroke="#1A9E6E" strokeWidth="2.5" strokeLinecap="round" />
-                                <path d="M20 8C26.627 8 32 13.373 32 20C32 26.627 26.627 32 20 32" stroke="#2DD4BF" strokeWidth="2.5" strokeLinecap="round" />
-                                <path d="M14 20C14 20 17 14 24 13C24 13 26 20 20 24C20 24 16 22 14 20Z" fill="#1A9E6E" />
-                                <circle cx="26" cy="13" r="2.5" fill="#2DD4BF" />
-                            </svg>
-                            <span className="text-lg font-bold text-[#1A9E6E]">
-                                MaatiTrace
+                            <img src={maatiAiLogo} alt="MaatiAI" className="h-8 w-8 rounded-full" />
+                            <span className="text-lg font-bold text-[#c07a43]">
+                                MaatiAI
                             </span>
                         </Link>
                         <p className="text-gray-400 text-sm leading-relaxed mb-6">

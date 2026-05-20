@@ -108,7 +108,7 @@ const MaatiMap = memo(function MaatiMap() {
           className="rounded-xl border border-emerald-200/40 bg-gradient-to-br from-white to-emerald-50/40 px-4 py-3 text-slate-900 shadow-lg"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-600">
-            ðŸŒ MaatiTrace
+            MaatiTrace
           </p>
           <h1 className="text-xl font-bold">Field Mapping</h1>
         </motion.div>

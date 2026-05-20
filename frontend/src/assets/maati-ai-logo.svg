@@ -1,4 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title desc">
+  <title id="title">MaatiAI logo</title>
+  <desc id="desc">A young plant growing from layered soil.</desc>
   <circle cx="64" cy="52" r="48" fill="#f4f0df"/>
   <path d="M32 66c13-8 28-10 45-4 10 4 18 4 29-2 1 18-8 32-25 39-18 8-38 5-51-8-7-7-10-16-9-25 4 1 7 1 11 0z" fill="#5b321d"/>
   <path d="M27 67c20-10 36-10 54-3 10 4 19 3 29-4-1 8-3 16-7 22-15 4-27 5-39 1-13-4-24-3-36 3-4-6-6-12-7-19 2 0 4 0 6 0z" fill="#a76634"/>
