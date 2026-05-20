@@ -32,6 +32,7 @@ const navItems = [
         ]
     },
     { label: 'Crop Knowledge Grid', path: '/knowledge-grid' },
+    { label: 'Traceability', path: '/traceability' },
     {
         label: 'Resources',
         submenu: [

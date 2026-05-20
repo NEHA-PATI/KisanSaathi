@@ -17,6 +17,7 @@ def env_list(name: str) -> list[str]:
 allowed_origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://maatitrace.onrender.com",
     "https://maatitrace.in",
     "https://www.maatitrace.in",
     *env_list("FRONTEND_URL"),
@@ -40,4 +41,4 @@ app.include_router(trends_router)
 
 @app.get("/")
 def home():
-    return {"message": "BhoomiAI Backend Running"}
+    return {"message": "MaatiTrace Backend Running"}

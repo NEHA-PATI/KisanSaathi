@@ -16,6 +16,9 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Dashboard from './pages/Dashboard';
 import LandAnalytics from './pages/LandAnalytics';
+import TraceabilityPage from './pages/TraceabilityPage';
+import SupplierDashboard from './pages/SupplierDashboard';
+import TraceConnect from './pages/traceconnect';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -45,11 +48,14 @@ const AuthenticatedApp = () => {
         <Route path="/solutions" element={<Solutions />} />
         <Route path="/industry" element={<Industry />} />
         <Route path="/knowledge-grid" element={<KnowledgeGrid />} />
+        <Route path="/traceability" element={<TraceabilityPage />} />
+        <Route path="/traceability/supplier" element={<SupplierDashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
       </Route>
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/lands/:id" element={<LandAnalytics />} />
+      <Route path="/traceconnect" element={<TraceConnect />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
